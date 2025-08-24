@@ -27,6 +27,12 @@ namespace aquinas
             return SIZE >= MB_TO_BYTES ? "MB" : 
                     SIZE >= KB_TO_BYTES ? "KB" : "B";
         }
+
+        constexpr auto FORMAT_SIZE(size_t SIZE)
+        {
+            return SIZE >= MB_TO_BYTES ? SIZE / MB_TO_BYTES :
+           SIZE >= KB_TO_BYTES ? SIZE / KB_TO_BYTES : SIZE;
+        }
     }
 }
 
