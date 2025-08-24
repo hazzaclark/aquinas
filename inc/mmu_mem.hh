@@ -10,6 +10,7 @@
 // NESTED INCLUDES
 
 #include <common.hh>
+#include <util.hh>
 
 // SYSTEM INCLUDES  
 
@@ -24,6 +25,25 @@ namespace aquinas
         #define     MAX_ADDR_START          0x0000000
         #define     MAX_MEMORY_SIZE         0x1000000
         #define     MAX_ADDR_END            (MAX_ADDR_START + MAX_MEMORY_SIZE - 1)
+
+        enum class MEMORY_OPTION : char
+        {
+            READ = 'R',
+            WRITE = 'W',
+            INVALID_READ = '!',
+            INVALID_WRITE = '?',
+            MAP = 'M',
+            UNMAP = 'U',
+            MOVE = 'O',
+            ERROR = 'E'
+        };
+
+        enum class MEMORY_SIZE : U8
+        {
+            SIZE_8 = 8,
+            SIZE_16 = 16,
+            SIZE_32 = 32
+        };
     }
 }
 
