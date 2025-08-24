@@ -33,6 +33,18 @@ namespace aquinas
             return SIZE >= MB_TO_BYTES ? SIZE / MB_TO_BYTES :
            SIZE >= KB_TO_BYTES ? SIZE / KB_TO_BYTES : SIZE;
         }
+
+        // UTILITY FOR EXTRACING SPECIFIC BITS FOR DYNAMIC BIT MANIPULATION
+        // PRESUPPOSES AN INTEGRAL VALUE AS THE BIT MANTISSA BASED ON AN ARBITRARY SIZE
+        
+        template<typename T> 
+        constexpr T EXTRACT_BITS(T VALUE, int START, int NUM)
+        {
+            static_assert(std::is_integral<T> "[EXTRACT] -> REQUIRES INTEGRAL TYPE ARG\n");
+            const T MASK = (T(1) << NUM) - 1;
+
+            return (VALUE >> START) & MASK;
+        }
     }
 }
 
