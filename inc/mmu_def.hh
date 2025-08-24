@@ -18,6 +18,13 @@ namespace aquinas
     {
         #define     MMU_ATC_ENTRIES         64
         #define     MMU_ATC_MAX_TLB         7
+        #define     MMU_ATC_BUS_ERR         0x08000000
+        #define     MMU_ATC_CACHE           0x04000000
+        #define     MMU_ATC_WRITE_PR        0x02000000
+        #define     MMU_ATC_MOD             0x01000000
+        #define     MMU_ATC_MASK            0x00FFFFFF
+        #define     MMU_ATC_SHIFT           8
+        
         #define     MMU_SR_BUS_ERR          0x8000
     }
 }
