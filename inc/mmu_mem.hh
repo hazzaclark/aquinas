@@ -183,11 +183,12 @@ namespace aquinas
                 void MEM_WRITE_16(U32 ADDRESS, U16 VALUE);
                 void MEM_WRITE_32(U32 ADDRESS, U32 VALUE);
 
-            private:
+            public:
                 void MEM_TRACE(aquinas::mmu_mem_opts::MEMORY_OPTION OP, U32 ADDRESS, 
                             aquinas::mmu_mem_opts::MEMORY_SIZE SIZE, U32 VALUE) const;
 
-                void VERBOSE_TRACE(const std::string& MSG) const;
+                template<typename... ARGS>
+                void VERBOSE_TRACE(const char* FMT, ARGS... ARG) const;
         };
     }
 }
