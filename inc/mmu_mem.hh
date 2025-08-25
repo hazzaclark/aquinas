@@ -117,6 +117,22 @@ namespace aquinas
                 // MOVE CONSTRUCTOR AND ASSIGNMENT
                 MEMORY_BUFFER(MEMORY_BUFFER&&) = default;
                 MEMORY_BUFFER& operator=(MEMORY_BUFFER&&) = default;
+
+                // DELETE AND COPY CONSTRUCTORS
+                MEMORY_BUFFER(const MEMORY_BUFFER&) = delete;
+                MEMORY_BUFFER& operator=(const MEMORY_BUFFER&) = delete;
+
+                // GETTER METHODS FOR ACCESSING CLASS ATTRIBUTES
+                [[nodiscard]] bool MEM_CONTAINS(U32 ADDRESS) const noexcept;
+                [[nodiscard]] U32 MEM_BASE() const noexcept { return BASE; }
+                [[nodiscard]] U32 MEM_END() const noexcept { return END; }
+                [[nodiscard]] U32 MEM_SIZE() const noexcept { return SIZE; }
+                [[nodiscard]] bool MEM_WRITEABLE() const noexcept { return WRITEABLE; }
+                [[nodiscard]] const MEMORY_USAGE& MEM_USAGE() const noexcept { return USAGE; }
+
+                // MEMORY OPERATIONS
+                [[nodiscard]] std::unique_ptr<U32> MEM_READ(U32 ADDRESS, aquinas::mmu_mem_opts::MEMORY_SIZE MEM_SIZE);
+                [[nodiscard]] bool MEM_READ(U32 ADDRESS, U32 VALUE, aquinas::mmu_mem_opts::MEMORY_SIZE MEM_SIZE);
         };
     }
 }
