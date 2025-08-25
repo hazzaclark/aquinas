@@ -26,6 +26,9 @@ namespace aquinas
         #define     MAX_MEMORY_SIZE         0x1000000
         #define     MAX_ADDR_END            (MAX_ADDR_START + MAX_MEMORY_SIZE - 1)
 
+        // DEFINE ENUM'S TO INADVERTENTLY REPLACE THE NEED FOR CONSTANT EXPRESSIONS
+        // HELPS WITH BEING ABLE TO REPURPOSE AND MODULARISE LATER ON
+
         enum class MEMORY_OPTION : char
         {
             READ = 'R',
@@ -43,6 +46,27 @@ namespace aquinas
             SIZE_8 = 8,
             SIZE_16 = 16,
             SIZE_32 = 32
+        };
+
+        enum class MEMORY_ERROR
+        {
+            OK,
+            BOUNDS,
+            READONLY,
+            UNMAPPED,
+            BUS,
+            BUFFER,
+            SIZE,
+            RESERVED,
+            OVERF,
+            BAD_READ,
+            BAD_WRITE
+        };
+
+        enum class MEMORY_OPT_FLAG : U8
+        {
+            BASIC = 1 << 0,
+            VERBOSE = 1 << 1,
         };
     }
 }
