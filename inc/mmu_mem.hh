@@ -33,6 +33,8 @@ namespace aquinas
         #define     MAX_MEMORY_SIZE         0x1000000
         #define     MAX_ADDR_END            (MAX_ADDR_START + MAX_MEMORY_SIZE - 1)
 
+        #define     VERBOSE_HOOK            OPT_OFF
+
         // DEFINE ENUM'S TO INADVERTENTLY REPLACE THE NEED FOR CONSTANT EXPRESSIONS
         // HELPS WITH BEING ABLE TO REPURPOSE AND MODULARISE LATER ON
 
@@ -134,7 +136,7 @@ namespace aquinas
             private:
                 std::vector<std::unique_ptr<MEMORY_BUFFER>> BUFFERS;
                 std::bitset<8> ENABLED_FLAGS;
-                bool TRACE_ENABLED = true;
+                bool TRACE_ENABLED = false;
                 bool STOPPED = false;
 
                 static constexpr std::array<const char*, 11> ERROR_MSG = 
@@ -169,7 +171,7 @@ namespace aquinas
             public:
                 MEMORY_MANAGER();
 
-                void SET_STOPPED(bool STOPPED) { STOPPED = STOPPED; }
+                void SET_STOPPED(bool IS_STOPPED) { STOPPED = IS_STOPPED; }
                 void SHOW_MEMORY_MAPS() const;
                 
                 bool MAP_MEMORY(U32 BASE, U32 END, bool WRITEABLE);
