@@ -90,12 +90,12 @@ namespace aquinas
         class MEMORY_BUFFER
         {
             private:
+                std::unique_ptr<U8[]> BUFFER;
                 U32 BASE;
                 U32 END;
                 U32 SIZE;
-                std::unique_ptr<U8[]> BUFFER;
-                bool WRITEABLE;
                 MEMORY_USAGE USAGE;
+                bool WRITEABLE;
 
             // CONSTRUCT A BASE OBJECT OF THE MEMORY BUFFER - WHICH WILL PRESUPPOSE THE ARBITARY
             // STATE OF THE START AND END.
