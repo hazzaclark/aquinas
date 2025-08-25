@@ -42,7 +42,6 @@ bool MEMORY_BUFFER::MEM_CONTAINS(U32 ADDRESS) const noexcept
 MEMORY_BUFFER* MEMORY_MANAGER::MEM_FIND(U32 ADDRESS)
 {
     VERBOSE_TRACE("FOUND MEMORY: 0x%08X", ADDRESS);
-
     auto FOUND = std::find_if(BUFFERS.begin(), BUFFERS.end(), 
                                 [ADDRESS](const auto& BUFFER)
                                 {
@@ -54,7 +53,17 @@ MEMORY_BUFFER* MEMORY_MANAGER::MEM_FIND(U32 ADDRESS)
     {
         // PRESUPPOSE THE CURRENT BUFFER THAT IS FOUND
         const auto& BUFFER = *FOUND;
-        VERBOSE_TRACE("ACCESSED: 0x%08X [%s]", ADDRESS, BUFFER->MEM_WRITEABLE() ? "RW" : "RO");
+
+        // CALCULATE THE BUFFER INDEX BASED ON THE SIZE AND WHAT IS FOUND
+        size_t BUFFER_INDEX = std::distance(BUFFERS.begin(), FOUND);
+
+        VERBOSE_TRACE("ACCESSED: 0x%08X [%s] IN BUFFER %u 0x%08X - 0x%08X\n", 
+                        ADDRESS, 
+                        BUFFER->MEM_WRITEABLE() ? "RW" : "RO",
+                        BUFFER_INDEX,
+                        BUFFER->MEM_BASE(),
+                        BUFFER->MEM_END());
+
         return FOUND->get();
     }
     
@@ -87,3 +96,4 @@ void MEMORY_MANAGER::SHOW_MEMORY_MAPS() const
         }
     }
 }
+
