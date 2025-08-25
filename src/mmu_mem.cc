@@ -13,6 +13,9 @@
 #include <mmu_mem.hh>
 #include <mmu_def.hh>
 
+// SYSTEM INCLUDES
+#include <cstdio>
+
 using namespace aquinas::mmu_mem_opts;
 using namespace aquinas::mmu_mem;
 
@@ -26,10 +29,9 @@ MEMORY_MANAGER::MEMORY_MANAGER()
 }
 
 // DETERMINE WHAT PARAMETERS/VALUES THE CURRENT BUFFER CONTAINS
-
 bool MEMORY_BUFFER::MEM_CONTAINS(U32 ADDRESS) const noexcept
 {
-    return ADDRESS >= BASE && ADDRESS <= (BASE + SIZE);
+    return ADDRESS >= BASE && ADDRESS <= END;
 }
 
 // RETURNS AN ITERATOR CLAUSE FROM THE FIRST ELEMENT IN A SPECIFIED RANGE
@@ -38,6 +40,8 @@ bool MEMORY_BUFFER::MEM_CONTAINS(U32 ADDRESS) const noexcept
 
 MEMORY_BUFFER* MEMORY_MANAGER::MEM_FIND(U32 ADDRESS)
 {
+    VERBOSE_TRACE("FOUND MEMORY: 0x" + std::to_string(ADDRESS));
+
     auto FOUND = std::find_if(BUFFERS.begin(), BUFFERS.end(), 
                                 [ADDRESS](const auto& BUFFER)
                                 {
@@ -53,10 +57,6 @@ MEMORY_BUFFER* MEMORY_MANAGER::MEM_FIND(U32 ADDRESS)
     return nullptr;
 }
 
-// MAP THE CORRESPONDING PARAMETERS TO A DESIGNATED REGION OF MEMORY
-// THE FOLLOWING WILL LOOK TO DETERMINE TO MAKE A UNIQUE OBJECT BASED ON THE
-// PROVIDED SIZE OF THE BUFFER
-
 bool MEMORY_MANAGER::MAP_MEMORY(U32 BASE, U32 END, bool WRITEABLE)
 {
     auto BUFFER = std::make_unique<MEMORY_BUFFER>(BASE, END, WRITEABLE);
@@ -64,4 +64,3 @@ bool MEMORY_MANAGER::MAP_MEMORY(U32 BASE, U32 END, bool WRITEABLE)
 
     return true;
 }
-
