@@ -116,14 +116,6 @@ namespace aquinas
                     std::fill_n(BUFFER.get(), SIZE, 0);
                 }
 
-                // MOVE CONSTRUCTOR AND ASSIGNMENT
-                MEMORY_BUFFER(MEMORY_BUFFER&&) = default;
-                MEMORY_BUFFER& operator=(MEMORY_BUFFER&&) = default;
-
-                // DELETE AND COPY CONSTRUCTORS
-                MEMORY_BUFFER(const MEMORY_BUFFER&) = delete;
-                MEMORY_BUFFER& operator=(const MEMORY_BUFFER&) = delete;
-
                 // GETTER METHODS FOR ACCESSING CLASS ATTRIBUTES
                 bool MEM_CONTAINS(U32 ADDRESS) const noexcept;
                 U32 MEM_BASE() const noexcept { return BASE; }
@@ -171,7 +163,6 @@ namespace aquinas
             // IN THE SOURCE FILE
 
             private:
-                MEMORY_BUFFER* MEM_FIND(U32 ADDRESS);
                 U32 MEMORY_READ(U32 ADDRESS, aquinas::mmu_mem_opts::MEMORY_SIZE MEM_SIZE);
                 void MEMORY_WRITE(U32 ADDRESS, U32 VALUE, aquinas::mmu_mem_opts::MEMORY_SIZE MEM_SIZE);
 
@@ -182,6 +173,7 @@ namespace aquinas
                 void SHOW_MEMORY_MAPS() const;
                 
                 bool MAP_MEMORY(U32 BASE, U32 END, bool WRITEABLE);
+                MEMORY_BUFFER* MEM_FIND(U32 ADDRESS);
 
                 U8 MEM_READ_8(U32 ADDRESS);
                 U16 MEM_READ_16(U32 ADDRESS);
@@ -190,6 +182,12 @@ namespace aquinas
                 void MEM_WRITE_8(U32 ADDRESS, U8 VALUE);
                 void MEM_WRITE_16(U32 ADDRESS, U16 VALUE);
                 void MEM_WRITE_32(U32 ADDRESS, U32 VALUE);
+
+            private:
+                void MEM_TRACE(aquinas::mmu_mem_opts::MEMORY_OPTION OP, U32 ADDRESS, 
+                            aquinas::mmu_mem_opts::MEMORY_SIZE SIZE, U32 VALUE) const;
+
+                void VERBOSE_TRACE(const std::string& MSG) const;
         };
     }
 }
