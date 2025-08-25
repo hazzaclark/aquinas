@@ -20,7 +20,9 @@
 
 #include <array>
 #include <algorithm>
+#include <bitset>
 #include <memory>
+#include <vector>
 
 namespace aquinas
 {
@@ -133,6 +135,33 @@ namespace aquinas
                 // MEMORY OPERATIONS
                 [[nodiscard]] std::unique_ptr<U32> MEM_READ(U32 ADDRESS, aquinas::mmu_mem_opts::MEMORY_SIZE MEM_SIZE);
                 [[nodiscard]] bool MEM_READ(U32 ADDRESS, U32 VALUE, aquinas::mmu_mem_opts::MEMORY_SIZE MEM_SIZE);
+        };
+
+        class MEMORY_MANAGER
+        {
+            private:
+                std::vector<std::unique_ptr<MEMORY_BUFFER>> BUFFERS;
+                std::bitset<8> ENABLED_FLAGS;
+                bool TRACE_ENABLED = true;
+                bool STOPPED = false;
+
+                static constexpr std::array<const char*, 11> ERROR_MSG = 
+                {
+                    "OK",
+                    "MEMORY OUT OF BOUNDS",
+                    "MEMORY IS READ ONLY", 
+                    "MEMORY REGION IS UNMAPPED",
+                    "MEMORY HAS EXCEEDED BUS LIMIT",
+                    "MEMORY HAS TOO MANY BUFFERS",
+                    "MEMORY HAS AN INVALID SIZE FOR REGION",
+                    "MEMORY VIOLATES A RESERVED RANGE",
+                    "MEMORY OVERFLOW",
+                    "MEMORY ENCOUNTERED A BAD READ",
+                    "MEMORY ENCOUNTERED A BAD WRITE"
+                };
+
+            public:
+                MEMORY_MANAGER();
         };
     }
 }
