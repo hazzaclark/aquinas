@@ -13,13 +13,29 @@
 #include <mmu_mem.hh>
 #include <mmu_def.hh>
 
-using namespace aquinas;
+using namespace aquinas::mmu_mem_opts;
+using namespace aquinas::mmu_mem;
 
 // CONSTRUCT THE BASE OBJECT OF THE MEMORY MANAGER
 // THE INITIALISATION WILL PRESUPPOSE WHICH FALGS ARE ENABLED
 
-mmu_mem::MEMORY_MANAGER::MEMORY_MANAGER()
+MEMORY_MANAGER::MEMORY_MANAGER()
 {
-    ENABLED_FLAGS[static_cast<size_t>(mmu_mem_opts::MEMORY_OPT_FLAG::BASIC)] = true;
-    ENABLED_FLAGS[static_cast<size_t>(mmu_mem_opts::MEMORY_OPT_FLAG::VERBOSE)] = true;
+    ENABLED_FLAGS[static_cast<size_t>(MEMORY_OPT_FLAG::BASIC)] = true;
+    ENABLED_FLAGS[static_cast<size_t>(MEMORY_OPT_FLAG::VERBOSE)] = true;
+}
+
+// RETURNS AN ITERATOR CLAUSE FROM THE FIRST ELEMENT IN A SPECIFIED RANGE
+// IN THIS INSTANCE, WE WANT TO BE ABLE TO DETERMINE IF THERE IS A VALID
+// BUFFER FOUND IN RELATION TO THE BASE AND END OF THE MAP
+
+MEMORY_BUFFER* MEMORY_MANAGER::MEM_FIND(U32 ADDRESS)
+{
+    auto FOUND = std::find_if(BUFFERS.begin(), BUFFERS.end(), 
+                                [ADDRESS](const auto& BUFFER)
+                                {
+                                    return BUFFER && BUFFER->MEM_CONTAINS(ADDRESS);
+                                });
+    
+    return nullptr;
 }
