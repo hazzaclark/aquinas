@@ -28,6 +28,13 @@ int main(void)
 
     MEM_MANAGER.SHOW_MEMORY_MAPS();
 
+    printf("\nTESTING BASIC READ AND WRITES\n");
+
+    U8 TEST_8 = 0xAA;
+    MEM_MANAGER.MEM_WRITE_8(0x1000, TEST_8);
+    U8 READ_8 = MEM_MANAGER.MEM_READ_8(0x1000);
+    printf("8 BIT: WROTE: 0x%02X, READ: 0x%02X\n", TEST_8, READ_8);
+
     MEM_MANAGER.SET_STOPPED(true);
     MEM_MANAGER.SHOW_MEMORY_MAPS();
     return 0;
