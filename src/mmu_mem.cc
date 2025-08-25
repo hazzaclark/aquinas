@@ -51,6 +51,9 @@ MEMORY_BUFFER* MEMORY_MANAGER::MEM_FIND(U32 ADDRESS)
     // DETERMINE WHEN WE HAVE REACHED THE END OF A DESIGNATED BUFFER
     if(FOUND != BUFFERS.end())
     {
+        // PRESUPPOSE THE CURRENT BUFFER THAT IS FOUND
+        const auto& BUFFER = *FOUND;
+        VERBOSE_TRACE("ACCESSED: 0x" + std::to_string(ADDRESS) + " [" + (BUFFER->MEM_WRITEABLE() ? "RW" : "RO") + "]");
         return FOUND->get();
     }
     
