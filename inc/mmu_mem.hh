@@ -125,16 +125,16 @@ namespace aquinas
                 MEMORY_BUFFER& operator=(const MEMORY_BUFFER&) = delete;
 
                 // GETTER METHODS FOR ACCESSING CLASS ATTRIBUTES
-                [[nodiscard]] bool MEM_CONTAINS(U32 ADDRESS) const noexcept;
-                [[nodiscard]] U32 MEM_BASE() const noexcept { return BASE; }
-                [[nodiscard]] U32 MEM_END() const noexcept { return END; }
-                [[nodiscard]] U32 MEM_SIZE() const noexcept { return SIZE; }
-                [[nodiscard]] bool MEM_WRITEABLE() const noexcept { return WRITEABLE; }
-                [[nodiscard]] const MEMORY_USAGE& MEM_USAGE() const noexcept { return USAGE; }
+                bool MEM_CONTAINS(U32 ADDRESS) const noexcept;
+                U32 MEM_BASE() const noexcept { return BASE; }
+                U32 MEM_END() const noexcept { return END; }
+                U32 MEM_SIZE() const noexcept { return SIZE; }
+                bool MEM_WRITEABLE() const noexcept { return WRITEABLE; }
+                const MEMORY_USAGE& MEM_USAGE() const noexcept { return USAGE; }
 
                 // MEMORY OPERATIONS
-                [[nodiscard]] std::unique_ptr<U32> MEM_READ(U32 ADDRESS, aquinas::mmu_mem_opts::MEMORY_SIZE MEM_SIZE);
-                [[nodiscard]] bool MEM_READ(U32 ADDRESS, U32 VALUE, aquinas::mmu_mem_opts::MEMORY_SIZE MEM_SIZE);
+                std::unique_ptr<U32> MEM_READ(U32 ADDRESS, aquinas::mmu_mem_opts::MEMORY_SIZE MEM_SIZE);
+                bool MEM_READ(U32 ADDRESS, U32 VALUE, aquinas::mmu_mem_opts::MEMORY_SIZE MEM_SIZE);
         };
 
         class MEMORY_MANAGER
@@ -160,7 +160,7 @@ namespace aquinas
                     "MEMORY ENCOUNTERED A BAD WRITE"
                 };
 
-                [[nodiscard]] bool IS_TRACE_ENABLED(aquinas::mmu_mem_opts::MEMORY_OPT_FLAG FLAG) const noexcept;
+                bool IS_TRACE_ENABLED(aquinas::mmu_mem_opts::MEMORY_OPT_FLAG FLAG) const noexcept;
                 void ENABLE_TRACE_FLAGS(aquinas::mmu_mem_opts::MEMORY_OPT_FLAG FLAG) noexcept;
                 void DISABLE_TRACE_FLAGS(aquinas::mmu_mem_opts::MEMORY_OPT_FLAG FLAG) noexcept;
 
@@ -171,17 +171,15 @@ namespace aquinas
                 void SHOW_MEMORY_MAPS() const;
                 
                 bool MAP_MEMORY(U32 BASE, U32 END, bool WRITEABLE);
+                MEMORY_BUFFER* MEM_FIND(U32 ADDRESS);
 
-                [[nodiscard]] U8 READ_8(U32 ADDRESS);
-                [[nodiscard]] U16 READ_16(U32 ADDRESS);
-                [[nodiscard]] U32 READ_32(U32 ADDRESS);
+                U8 MEM_READ_8(U32 ADDRESS);
+                U16 MEM_READ_16(U32 ADDRESS);
+                U32 MEM_READ_32(U32 ADDRESS);
 
-                void WRITE_8(U32 ADDRESS, U8 VALUE);
-                void WRITE_16(U32 ADDRESS, U16 VALUE);
-                void WRITE_32(U32 ADDRESS, U32 VALUE);
-                
-                [[nodiscard]] U16 READ_IMM_16(void);
-                [[nodiscard]] U32 READ_IMM_32(void);
+                void MEM_WRITE_8(U32 ADDRESS, U8 VALUE);
+                void MEM_WRITE_16(U32 ADDRESS, U16 VALUE);
+                void MEM_WRITE_32(U32 ADDRESS, U32 VALUE);
         };
     }
 }
