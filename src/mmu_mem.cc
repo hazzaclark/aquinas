@@ -14,6 +14,7 @@
 #include <mmu_def.hh>
 
 // SYSTEM INCLUDES
+
 #include <cstdio>
 
 using namespace aquinas::mmu_mem_opts;
@@ -40,7 +41,7 @@ bool MEMORY_BUFFER::MEM_CONTAINS(U32 ADDRESS) const noexcept
 
 MEMORY_BUFFER* MEMORY_MANAGER::MEM_FIND(U32 ADDRESS)
 {
-    VERBOSE_TRACE("FOUND MEMORY: 0x" + std::to_string(ADDRESS));
+    VERBOSE_TRACE("FOUND MEMORY: 0x%08X", ADDRESS);
 
     auto FOUND = std::find_if(BUFFERS.begin(), BUFFERS.end(), 
                                 [ADDRESS](const auto& BUFFER)
@@ -53,7 +54,7 @@ MEMORY_BUFFER* MEMORY_MANAGER::MEM_FIND(U32 ADDRESS)
     {
         // PRESUPPOSE THE CURRENT BUFFER THAT IS FOUND
         const auto& BUFFER = *FOUND;
-        VERBOSE_TRACE("ACCESSED: 0x" + std::to_string(ADDRESS) + " [" + (BUFFER->MEM_WRITEABLE() ? "RW" : "RO") + "]");
+        VERBOSE_TRACE("ACCESSED: 0x%08X [%s]", ADDRESS, BUFFER->MEM_WRITEABLE() ? "RW" : "RO");
         return FOUND->get();
     }
     
