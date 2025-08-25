@@ -160,6 +160,10 @@ namespace aquinas
                     "MEMORY ENCOUNTERED A BAD WRITE"
                 };
 
+                [[nodiscard]] bool IS_TRACE_ENABLED(aquinas::mmu_mem_opts::MEMORY_OPT_FLAG FLAG) const noexcept;
+                void ENABLE_TRACE_FLAGS(aquinas::mmu_mem_opts::MEMORY_OPT_FLAG FLAG) noexcept;
+                void DISABLE_TRACE_FLAGS(aquinas::mmu_mem_opts::MEMORY_OPT_FLAG FLAG) noexcept;
+
             public:
                 MEMORY_MANAGER();
         };
