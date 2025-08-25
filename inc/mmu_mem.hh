@@ -134,7 +134,7 @@ namespace aquinas
 
                 // MEMORY OPERATIONS
                 std::unique_ptr<U32> MEM_READ(U32 ADDRESS, aquinas::mmu_mem_opts::MEMORY_SIZE MEM_SIZE);
-                bool MEM_READ(U32 ADDRESS, U32 VALUE, aquinas::mmu_mem_opts::MEMORY_SIZE MEM_SIZE);
+                bool MEM_WRITE(U32 ADDRESS, U32 VALUE, aquinas::mmu_mem_opts::MEMORY_SIZE MEM_SIZE);
         };
 
         class MEMORY_MANAGER
@@ -164,6 +164,17 @@ namespace aquinas
                 void ENABLE_TRACE_FLAGS(aquinas::mmu_mem_opts::MEMORY_OPT_FLAG FLAG) noexcept;
                 void DISABLE_TRACE_FLAGS(aquinas::mmu_mem_opts::MEMORY_OPT_FLAG FLAG) noexcept;
 
+            // WHAT MAKES THESE PRIVATE METHODS DIFFERENT TO THE MEMORY BUFFER
+            // IS THAT THIS ENCOMPASSES THE GENERAL MANAGEMENT OF THE OPERATIONS
+
+            // THIS ESPECIALLY HELPS WITH BEING ABLE TO ACCESS THE INTRINSICS PASSED THROUGH
+            // IN THE SOURCE FILE
+
+            private:
+                MEMORY_BUFFER* MEM_FIND(U32 ADDRESS);
+                U32 MEMORY_READ(U32 ADDRESS, aquinas::mmu_mem_opts::MEMORY_SIZE MEM_SIZE);
+                void MEMORY_WRITE(U32 ADDRESS, U32 VALUE, aquinas::mmu_mem_opts::MEMORY_SIZE MEM_SIZE);
+
             public:
                 MEMORY_MANAGER();
 
@@ -171,7 +182,6 @@ namespace aquinas
                 void SHOW_MEMORY_MAPS() const;
                 
                 bool MAP_MEMORY(U32 BASE, U32 END, bool WRITEABLE);
-                MEMORY_BUFFER* MEM_FIND(U32 ADDRESS);
 
                 U8 MEM_READ_8(U32 ADDRESS);
                 U16 MEM_READ_16(U32 ADDRESS);
