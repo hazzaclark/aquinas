@@ -10,6 +10,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(aquinas
     "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/mmu_mem.cc"
 )
 
 target_include_directories(aquinas PUBLIC
@@ -21,4 +22,5 @@ target_compile_options(aquinas PRIVATE
     -Wall
     -Wextra
     -Wno-unused-parameter
+    -std=c++17
 )
