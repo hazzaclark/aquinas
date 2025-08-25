@@ -166,6 +166,22 @@ namespace aquinas
 
             public:
                 MEMORY_MANAGER();
+
+                void SET_STOPPED(bool STOPPED) { STOPPED = STOPPED; }
+                void SHOW_MEMORY_MAPS() const;
+                
+                bool MAP_MEMORY(U32 BASE, U32 END, bool WRITEABLE);
+
+                [[nodiscard]] U8 READ_8(U32 ADDRESS);
+                [[nodiscard]] U16 READ_16(U32 ADDRESS);
+                [[nodiscard]] U32 READ_32(U32 ADDRESS);
+
+                void WRITE_8(U32 ADDRESS, U8 VALUE);
+                void WRITE_16(U32 ADDRESS, U16 VALUE);
+                void WRITE_32(U32 ADDRESS, U32 VALUE);
+                
+                [[nodiscard]] U16 READ_IMM_16(void);
+                [[nodiscard]] U32 READ_IMM_32(void);
         };
     }
 }
