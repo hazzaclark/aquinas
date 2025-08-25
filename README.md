@@ -7,7 +7,7 @@ The ambition with this project is to create a seamless means in which I am able 
 
 Created using the C++17 standard, this project aims to provide an understanding into how Memory Management works with a CISC architecture.
 
-Moreover, this project came about as a result of me wanting to be able to learn more about the inner workings and technical nuance surrounding memory management on the level by which processors and co-processors communciate with eachother. Furthermore, I wanted to make something to tie in and to cultivate my understanding for the Operating Systems module at my University.
+Moreover, this project came about as a result of me wanting to be able to learn more about the inner workings and technical nuance surrounding memory management on the level by which processors and co-processors communciate with eachother. All of this aims to cultivate my understanding for the Operating Systems module at my University.
 
 ## Building:
 
