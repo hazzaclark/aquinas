@@ -96,6 +96,27 @@ namespace aquinas
                 std::unique_ptr<U8[]> BUFFER;
                 bool WRITEABLE;
                 MEMORY_USAGE USAGE;
+
+            // CONSTRUCT A BASE OBJECT OF THE MEMORY BUFFER - WHICH WILL PRESUPPOSE THE ARBITARY
+            // STATE OF THE START AND END.
+
+            // LEVERAGES A UNIQUE IDENTIFIER TO BE ABLE TO CREATE AN BUFFER OBJECT OF AN ARBITARY TYPE
+            // TO MOULD TO THE CIRCUMSTANCES BY WHICH THE OBJECT IS CREATED FOR
+
+            // UPON CREATION, FILL THE RANGE WITH THE PARAMETERS OF THE BUFFER
+            // IN RELATION TO THE START
+
+            public:
+                MEMORY_BUFFER(U32 START, U32 END, bool WRITEABLE) 
+                : BASE(START), END(END), SIZE(END - BASE + 1), WRITEABLE(WRITEABLE)
+                {
+                    BUFFER = std::make_unique<U8[]>(SIZE);
+                    std::fill_n(BUFFER.get(), SIZE, 0);
+                }
+
+                // MOVE CONSTRUCTOR AND ASSIGNMENT
+                MEMORY_BUFFER(MEMORY_BUFFER&&) = default;
+                MEMORY_BUFFER& operator=(MEMORY_BUFFER&&) = default;
         };
     }
 }
