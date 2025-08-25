@@ -68,3 +68,22 @@ bool MEMORY_MANAGER::MAP_MEMORY(U32 BASE, U32 END, bool WRITEABLE)
 
     return true;
 }
+
+void MEMORY_MANAGER::SHOW_MEMORY_MAPS() const
+{
+    printf("\n%s MEMORY MAP(S):\n", STOPPED ? "AFTER EXEC" : "BEFORE EXEC");
+    printf("-------------------------------\n");
+    printf("START        END         ACCESS\n");
+    printf("-------------------------------\n");
+    
+    for (const auto& BUFFER : BUFFERS)
+    {
+        if (BUFFER)
+        {
+            std::printf("0x%08X  0x%08X    (%s)\n", 
+                       BUFFER->MEM_BASE(), 
+                       BUFFER->MEM_END(),
+                       BUFFER->MEM_WRITEABLE() ? "RW" : "RO");
+        }
+    }
+}
