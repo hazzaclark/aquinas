@@ -14,6 +14,7 @@
 
 // SYSTEM INCLUDES
 
+#include <array>
 #include <functional>
 
 namespace aquinas
@@ -26,7 +27,7 @@ namespace aquinas
         // DECLARATION OF THE MMU AGAINST COMMON PARAMS
 
         template<typename MMU_EA_READER>
-        using MMU_HANDLER = std::function<void(MMU_BASE*, U32 EA, U16 MASK, MMU_EA_READER READ_EA);
+        using MMU_HANDLER = std::function<void(MMU_BASE*, U32 EA, U16 MASK, MMU_EA_READER READ_EA)>;
 
         // CREATE A HANDLER TYPE FOR THE OPCODE HANDLER STRUCTURE
         // WHICH WILL PRESUPPOSE THE BASELINE MMU HANDLER TO DETERMINE EA
@@ -52,7 +53,6 @@ namespace aquinas
                 template<typename MMU_EA_READER>
                 using MMU_HANDLER_TABLE = std::array<MMU_HANDLER<MMU_EA_HANDLER>, 0x10000>;
 
-                template<typename MMU_EA_READER>
                 using MMU_CYCLES_TABLE = std::array<U8, 0x10000>;
         };
     }
