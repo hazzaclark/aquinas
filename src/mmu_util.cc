@@ -22,10 +22,17 @@ using namespace aquinas;
 using namespace aquinas::mmu_mem;
 using namespace aquinas::mmu_mem_opts;
 
-void MEM_TRACE(MEMORY_OPTION OP, U32 ADDRESS, 
-                            MEMORY_SIZE SIZE, U32 VALUE)
+void MEMORY_MANAGER::MEM_TRACE(MEMORY_OPTION OP, U32 ADDRESS, 
+                            MEMORY_SIZE SIZE, U32 VALUE, ...)
 {
-
+    if(IS_TRACE_ENABLED(MEMORY_OPT_FLAG::BASIC))
+    {
+        std::printf("[TRACE] %c ADDR:0x%08x SIZE:%d VALUE:0x%08x\n", 
+                   static_cast<char>(OP), 
+                   ADDRESS, 
+                   static_cast<int>(SIZE), 
+                   VALUE);
+    }
 }
 
 // THIS IS THE BEST WAY I HAVE BEEN ABLE TO REPLICATE THE __VA_ARGS__ FROM C
