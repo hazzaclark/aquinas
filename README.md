@@ -15,7 +15,68 @@ One of the many intrinsic features of this simulator is the separation between M
 
 Through this choice in design, it aims to mitigate any and all possible overhead and architectural-complications when handling specific exceptions, memory sizes, and overall operations.
 
-Furthermore, this also aims to help with the mdoularisation of code throughout the simulator to be able to handle general Memory operations through the MMU (pre-supposing a master processor such as the 68020+) as well as bus-specific memory handles and operations
+Furthermore, this also aims to help with the mdoularisation of code throughout the simulator to be able to handle general Memory operations through the MMU (pre-supposing a master processor such as the 68020+) as well as bus-specific memory handles and operations.
+
+```cpp
+// BUFFER MEMORY HANDLER - ACTUALLY HANDLES THE BIT MANIPULATION 
+std::unique_ptr<U32> MEMORY_BUFFER::MEM_READ(U32 ADDRESS, MEMORY_SIZE MEM_SIZE)
+{
+    // CREATE A GENERAL POINTER NOTATION FOR THE BUFFER
+    // DISCERNS THE PROVIDED SIZE SUBSEQUENTLY
+    const U8* BUFFER_PTR = BUFFER.get() + OFFSET;
+    
+    switch (MEM_SIZE)
+    {
+        case MEMORY_SIZE::SIZE_8:
+            RESULT =    static_cast<U32>(BUFFER_PTR[0]);
+            break;
+
+        case MEMORY_SIZE::SIZE_16:
+            RESULT =    static_cast<U32>(BUFFER_PTR[0]) << 8 |
+                        static_cast<U32>(BUFFER_PTR[1]);
+            break;
+
+        case MEMORY_SIZE::SIZE_32:
+            RESULT =    static_cast<U32>(BUFFER_PTR[0]) << 24 |
+                        static_cast<U32>(BUFFER_PTR[1]) << 16 |
+                        static_cast<U32>(BUFFER_PTR[2]) << 8 |
+                        static_cast<U32>(BUFFER_PTR[3]);
+            break;
+    }
+
+    return std::make_unique<U32>(RESULT);
+}
+
+// MEMORY MANAGER HANDLER - MODULARISED TO HELP WITH
+// FINDING THE BUFFER, ERROR HANDLING, ETC
+U32 MEMORY_MANAGER::MEMORY_READ(U32 ADDRESS, MEMORY_SIZE MEM_SIZE)
+{
+    // BOUND CHECKS FOR INVALID ADDRESSING
+    if(ADDRESS > MAX_ADDR_END)
+    {
+        MEM_ERROR(MEMORY_OPTION::ERROR, MEMORY_ERROR::RESERVED, MEM_SIZE,
+                "ATTEMPT TO READ FROM RESERVED ADDRESS RANGE");
+
+        MEM_TRACE(MEMORY_OPTION::INVALID_READ, ADDRESS, MEM_SIZE, ~0U);
+        return 0;
+    }
+
+    if(ADDRESS > MAX_MEMORY_SIZE)
+    {
+        MEM_ERROR(MEMORY_OPTION::ERROR, MEMORY_ERROR::BOUNDS, MEM_SIZE,
+                "ATTEMPT TO READ FROM ADDRESS BEYOND ADDRESSABLE SPACE");
+
+        MEM_TRACE(MEMORY_OPTION::INVALID_READ, ADDRESS, MEM_SIZE, ~0U);
+        return 0;
+    }
+}
+```
+
+Another feature that has been proven to be absolutely fruitful in my relevant developments is the unique and seamless integration of auto-disable for Hooks; providing customisation for the relevant information to be displayed in the terminal
+
+Due to the way in which some properties are accessed, it wasn't a simple case of being able to port the likeness from [lib68k_mem](https://github.com/hazzaclark/lib68k_mem/blob/main/) due to the unqiue characteristics of the pre-processor.
+
+Instead, a compile flag has been added to mitigate this issue; see the [build scheme](https://github.com/hazzaclark/aquinas/blob/main/CMakeLists.txt#L11) 
 
 ## Building:
 
