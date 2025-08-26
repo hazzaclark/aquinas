@@ -23,12 +23,14 @@ using namespace aquinas::mmu_mem;
 using namespace aquinas::mmu_mem_opts;
 using namespace aquinas::util;
 
+constexpr std::array<const char*, 11> MEMORY_MANAGER::ERROR_MSG;
+
 void MEMORY_MANAGER::MEM_TRACE(MEMORY_OPTION OP, U32 ADDRESS, 
                             MEMORY_SIZE SIZE, U32 VALUE, ...)
 {
     if(IS_TRACE_ENABLED(MEMORY_OPT_FLAG::BASIC))
     {
-        std::printf("[TRACE] %c ADDR:0x%08x SIZE:%d VALUE:0x%08x\n", 
+        std::printf("[TRACE] %c ADDR:0x%08X SIZE:%d VALUE:0x%08X\n", 
                    static_cast<char>(OP), 
                    ADDRESS, 
                    static_cast<int>(SIZE), 
@@ -46,7 +48,7 @@ void MEMORY_MANAGER::MEM_MAP_TRACE(MEMORY_OPTION OP, U32 BASE,
                    BASE,
                    END,
                    FORMAT_SIZE(static_cast<size_t>(SIZE)),
-                   FORMAT_UNIT(static_cast<size_t>(SIZE)));
+                   FORMAT_UNIT(static_cast<size_t>(SIZE)).c_str());
     }
 }
 
