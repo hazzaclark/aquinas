@@ -187,7 +187,15 @@ namespace aquinas
 
             public:
                 void MEM_TRACE(aquinas::mmu_mem_opts::MEMORY_OPTION OP, U32 ADDRESS, 
-                            aquinas::mmu_mem_opts::MEMORY_SIZE SIZE, U32 VALUE) const;
+                            aquinas::mmu_mem_opts::MEMORY_SIZE SIZE, U32 VALUE, ...);
+
+                void MEM_MAP_TRACE(aquinas::mmu_mem_opts::MEMORY_OPTION OP, U32 BASE, 
+                                    U32 END, aquinas::mmu_mem_opts::MEMORY_SIZE SIZE, ...);
+
+                void MEM_ERROR(aquinas::mmu_mem_opts::MEMORY_OPTION OP, 
+                                aquinas::mmu_mem_opts::MEMORY_ERROR ERROR,
+                                aquinas::mmu_mem_opts::MEMORY_SIZE SIZE,
+                                                    const char* MSG, ...);
 
                 void VERBOSE_TRACE(const char* FMT, ...) const;
         };
