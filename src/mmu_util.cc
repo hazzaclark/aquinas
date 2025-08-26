@@ -35,6 +35,25 @@ void MEMORY_MANAGER::MEM_TRACE(MEMORY_OPTION OP, U32 ADDRESS,
     }
 }
 
+void MEMORY_MANAGER::MEM_ERROR(MEMORY_OPTION OP, MEMORY_ERROR ERROR,
+                                MEMORY_SIZE SIZE, const char* MSG, ...)
+{
+    if(IS_TRACE_ENABLED(MEMORY_OPT_FLAG::VERBOSE))
+    {
+        std::printf("[ERROR] %c -> %-18s [SIZE: %d]: ", 
+                   static_cast<char>(OP), 
+                   ERROR_MSG[static_cast<std::size_t>(ERROR)],
+                   static_cast<int>(SIZE));
+        
+        va_list ARGS;
+        va_start(ARGS, MSG);
+        std::vprintf(MSG, ARGS);
+        va_end(ARGS);
+        
+        std::printf("\n");
+    }
+}
+
 // THIS IS THE BEST WAY I HAVE BEEN ABLE TO REPLICATE THE __VA_ARGS__ FROM C
 // USING C++17 
 
