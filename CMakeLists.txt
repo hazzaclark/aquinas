@@ -8,9 +8,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+option(ENABLE_VERBOSE_TRACE "MMU VERBOSE TRACE" OFF)
+
 add_executable(aquinas
     "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cc"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/mmu_mem.cc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/mmu_util.cc"
 )
 
 target_include_directories(aquinas PUBLIC
@@ -24,3 +27,11 @@ target_compile_options(aquinas PRIVATE
     -Wno-unused-parameter
     -std=c++17
 )
+
+if(ENABLE_VERBOSE_TRACE)
+    target_compile_definitions(aquinas PRIVATE VERBOSE_TRACE_ENABLED=1)
+    message(STATUS "MMU VERBOSE TRACE: ENABLED")
+else()
+    target_compile_definitions(aquinas PRIVATE VERBOSE_TRACE_ENABLED=0)
+    message(STATUS "MMU VERBOSE TRACE: DISABLED")
+endif()
