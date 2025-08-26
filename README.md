@@ -85,7 +85,7 @@ Another feature that has been proven to be absolutely fruitful in my relevant de
 
 Due to the way in which some properties are accessed, it wasn't a simple case of being able to port the likeness from [lib68k_mem](https://github.com/hazzaclark/lib68k_mem/blob/main/) due to the unqiue characteristics of the pre-processor.
 
-Instead, a compile flag has been added to mitigate this issue; see the [build scheme](https://github.com/hazzaclark/aquinas/blob/main/CMakeLists.txt#L11) 
+Instead, a compile flag has been added to mitigate this issue; see the [build scheme](https://github.com/hazzaclark/aquinas/commit/478e16bc35920b3cd797a8c05fa9a37dd909fc1c) 
 
 ## Building:
 
