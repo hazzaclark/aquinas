@@ -22,8 +22,6 @@ using namespace aquinas::mmu_mem_opts;
 using namespace aquinas::mmu_mem;
 using namespace aquinas::util;
 
-U8 FLAGS_ENABLED = 0;
-
 // CONSTRUCT THE BASE OBJECT OF THE MEMORY MANAGER
 // THE INITIALISATION WILL PRESUPPOSE WHICH FLAGS ARE ENABLED
 
@@ -222,23 +220,37 @@ void MEMORY_MANAGER::MEMORY_WRITE(U32 ADDRESS, U32 VALUE, MEMORY_SIZE MEM_SIZE)
     }
 }
 
+// SHOWS ALL OF THE MEMORY MAPS CURRRENTLY ALLOCATED AND DEFINE
+// AS PER THE CONTENTS OF THEIR PRE-REQUISITES
+
+// IT WILL LOOK TO DETERMINE THE SIZE OF HOW MANY ARE THERE
+// THE INDEXXING OF THE BUFFERS IN QUESTION ALL TO DETERMINE THEIR CHARACTERISTIC
+
 void MEMORY_MANAGER::SHOW_MEMORY_MAPS() const
 {
-    printf("\n%s MEMORY MAP(S):\n", STOPPED ? "AFTER EXEC" : "BEFORE EXEC");
-    printf("-------------------------------\n");
-    printf("START        END         ACCESS\n");
-    printf("-------------------------------\n");
-
-    for (const auto& BUFFER : BUFFERS)
+    printf("\n%s MEMORY MAPS:\n", STOPPED ? "AFTER" : "BEFORE");
+    printf("---------------------------------------------------------------\n");
+    printf("START        END         SIZE    STATE  READS   WRITES  ACCESS\n");
+    printf("---------------------------------------------------------------\n");
+    
+    for (unsigned INDEX = 0; INDEX < BUFFERS.size(); INDEX++)
     {
+        const auto& BUFFER = BUFFERS[INDEX];
         if (BUFFER)
         {
-            std::printf("0x%08X  0x%08X    (%s)\n", 
-                       BUFFER->MEM_BASE(), 
-                       BUFFER->MEM_END(),
-                       BUFFER->MEM_WRITEABLE() ? "RW" : "RO");
+            unsigned SIZE = BUFFER->MEM_END() - BUFFER->MEM_BASE() + 1;
+            printf("0x%08X 0x%08X  %3d%s     %2s  %6u  %6u      %s\n",
+                    BUFFER->MEM_BASE(),
+                    BUFFER->MEM_END(),
+                    FORMAT_SIZE(SIZE), 
+                    FORMAT_UNIT(SIZE).c_str(),
+                    BUFFER->MEM_WRITEABLE() ? "RW" : "RO",
+                    BUFFER->MEM_USAGE().READ_COUNT,
+                    BUFFER->MEM_USAGE().WRITE_COUNT,
+                    BUFFER->MEM_USAGE().ACCESSED ? "YES" : "NO");
         }
     }
+    printf("---------------------------------------------------------------\n");
 }
 
 // THE FOLLOWING WILL LOOK TO MAKE A UNIQUE POINTER NOTATION BASED ON
