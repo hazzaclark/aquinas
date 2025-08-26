@@ -70,6 +70,15 @@ U32 MEMORY_MANAGER::MEMORY_READ(U32 ADDRESS, MEMORY_SIZE MEM_SIZE)
         return 0;
     }
 }
+
+// HOW THEY ARE BOTH JOINED 
+// MEMORY_MANAGER::MEMORY_READ()
+
+if(auto RESULT = BUFFER->MEM_READ(ADDRESS, MEM_SIZE))
+{
+    MEM_TRACE(MEMORY_OPTION::READ, ADDRESS, MEM_SIZE, *RESULT);
+    return *RESULT;
+}
 ```
 
 Another feature that has been proven to be absolutely fruitful in my relevant developments is the unique and seamless integration of auto-disable for Hooks; providing customisation for the relevant information to be displayed in the terminal
