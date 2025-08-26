@@ -45,6 +45,16 @@ namespace aquinas
             MMU_OPCODE(MMU_HANDLER<MMU_EA_READER> HANDLER_, U16 MASK_, U16 MATCH_, U8 CYCLES_, const char* NAME_)
                 : HANDLER(HANDLER_), MASK(MASK_), MATCH(MATCH_), CYCLES(CYCLES_), NAME(NAME_) {} 
         };
+
+        class MMU_BASE
+        {
+            private:
+                template<typename MMU_EA_READER>
+                using MMU_HANDLER_TABLE = std::array<MMU_HANDLER<MMU_EA_HANDLER>, 0x10000>;
+
+                template<typename MMU_EA_READER>
+                using MMU_CYCLES_TABLE = std::array<U8, 0x10000>;
+        };
     }
 }
 
