@@ -50,12 +50,41 @@ namespace aquinas
 
         class MMU_BASE
         {
-            private:
+            public:
                 template<typename MMU_EA_READER>
                 using MMU_HANDLER_TABLE = std::array<MMU_HANDLER<MMU_EA_HANDLER>, 0x10000>;
 
                 using MMU_CYCLES_TABLE = std::array<U8, 0x10000>;
 
+                MMU_BASE();
+                ~MMU_BASE() = default;
+
+                // OPCODE HANDLER DECLARATIONS
+                template<typename MMU_EA_READER>
+                static void PFLUSHA_HANDLER(MMU_BASE* MMU, U32 EA, U16 MASK, MMU_EA_READER EA_);
+
+                template<typename MMU_EA_READER>
+                static void PFLUSHAN_HANDLER(MMU_BASE* MMU, U32 EA, U16 MASK, MMU_EA_READER EA_);
+
+                template<typename MMU_EA_READER>
+                static void PFLUSH_HANDLER(MMU_BASE* MMU, U32 EA, U16 MASK, MMU_EA_READER EA_);
+
+                template<typename MMU_EA_READER>
+                static void PLOADR_HANDLER(MMU_BASE* MMU, U32 EA, U16 MASK, MMU_EA_READER EA_);
+
+                template<typename MMU_EA_READER>
+                static void PLOADW_HANDLER(MMU_BASE* MMU, U32 EA, U16 MASK, MMU_EA_READER EA_);
+
+                template<typename MMU_EA_READER>
+                static void PMOVE_HANDLER(MMU_BASE* MMU, U32 EA, U16 MASK, MMU_EA_READER EA_);
+
+                template<typename MMU_EA_READER>
+                static void PTESTR_HANDLER(MMU_BASE* MMU, U32 EA, U16 MASK, MMU_EA_READER EA_);
+
+                template<typename MMU_EA_READER>
+                static void PTESTW_HANDLER(MMU_BASE* MMU, U32 EA, U16 MASK, MMU_EA_READER EA_);
+
+            private:
                 U32 CRP;
                 U32 SRP;
                 U16 TC;
