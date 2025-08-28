@@ -16,6 +16,7 @@
 
 #include <array>
 #include <functional>
+#include <unordered_map>
 
 namespace aquinas
 {
@@ -54,6 +55,15 @@ namespace aquinas
                 using MMU_HANDLER_TABLE = std::array<MMU_HANDLER<MMU_EA_HANDLER>, 0x10000>;
 
                 using MMU_CYCLES_TABLE = std::array<U8, 0x10000>;
+
+                U32 CRP;
+                U32 SRP;
+                U16 TC;
+                U16 SR;
+                U32 TRANS;
+
+                // CACHE FOR TRANSLATION TLB
+                std::unordered_map<U32, U32> TLB;
         };
     }
 }
