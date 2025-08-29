@@ -22,12 +22,12 @@ namespace aquinas
 {
     namespace mmu
     {
+        class MMU_BASE; 
+
         // RAW FUNCTION POINTER FOR MEMORY READ
         // MITIGATE THE OVERHEAD FOR NEEDLESS TEMPLATE CREATION
 
         using MMU_FUNC_READ_16 = std::function<U16(U32)>;
-
-        class MMU_BASE; 
         
         // CREATE A HANDLER TYPE FOR BEING ABLE TO DELEGATE THE FORWARD
         // DECLARATION OF THE MMU AGAINST COMMON PARAMS
@@ -52,6 +52,11 @@ namespace aquinas
             public:
                 MMU_BASE();
                 ~MMU_BASE() = default;
+
+                void FLUSH_TLB() noexcept { TLB.clear(); }
+                void FLUSH_TLB_ENTRY(U32 ADDRESS) noexcept;
+                bool LOOKUP_TLB(U32 LOG_ADDRESS, U32& PHYS_ADDRESS) noexcept;
+                void INSERT_TLB(U32 LOG_ADDRESS, U32 PYS_ADDRESS) noexcept;
 
             private:
                 U32 CRP;
