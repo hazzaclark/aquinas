@@ -94,14 +94,15 @@ namespace aquinas
                 static void PTESTW_HANDLER(MMU_BASE* MMU, MMU_FUNC_READ_16 MEM_READ, U32 PC);
         };
 
-        // ==================================================
-        //              MMU EXECUTION FUNCTIONS
-        // ==================================================
-
-        void MMU_BUILD_OPCODE_TABLE(std::array<MMU_HANDLER, 0x10000>& MMU_OPCODE_TLB,
+        namespace opcode
+        {
+            void MMU_BUILD_OPCODE_TABLE(std::array<MMU_HANDLER, 0x10000>& MMU_OPCODE_TLB,
                                     std::array<U8, 0x10000>& CYCLE_RANGE);
 
-        void MMU_EXEC(MMU_BASE* INST, MMU_FUNC_READ_16 MEM_READ, U32& PC, int MAX_CYCLES);
+            void MMU_EXEC(MMU_BASE* INST, MMU_FUNC_READ_16 MEM_READ, U32& PC, int MAX_CYCLES);
+
+            extern MMU_OPCODE MMU_OPCODE_HANDLER_TLB[];
+        }
     }
 }
 
