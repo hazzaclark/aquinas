@@ -35,7 +35,7 @@ MMU_BASE::MMU_BASE(mmu_mem::MEMORY_MANAGER* MEM)
 // UTILISES A FUNCTION POINTER IN ORDER TO DYNAMICALLY DETERMINE 
 // OPCODE DECLARATIVES, PC ADVANCEMENTS, ETC
 
-void mmu::opcode::MMU_EXEC(MEMORY_MANAGER* MEM, int CYCLES)
+void mmu::opcode::MMU_EXEC(MEMORY_MANAGER* MEM)
 {
     // 31/08/25
     // A LOT OF THESE ARE HERE SIMPLY BECAUSE THAT UNLIKE LIB68K
@@ -48,7 +48,7 @@ void mmu::opcode::MMU_EXEC(MEMORY_MANAGER* MEM, int CYCLES)
     int CYCLES_USED = 0;
     U32 MMU_PC = 0;
 
-    while(!STOPPED && CYCLES > 0)
+    while(!STOPPED)
     {
         // READ THE CURRENT INSTRUCTION INTO A MOCK IR
         // DISCERN HOW MANY CYCLES IT TAKES
@@ -60,7 +60,7 @@ void mmu::opcode::MMU_EXEC(MEMORY_MANAGER* MEM, int CYCLES)
 
         if (MMU_OPCODE_HANDLER[MMU_IR] == nullptr)
         {
-            printf("[ILLEGAL INSTRUCTION] PC: 0x%04X, IR: 0x%04X\n", MMU_PC, MMU_IR);
+            printf("\n[ILLEGAL INSTRUCTION] PC: 0x%04X, IR: 0x%04X\n", MMU_PC, MMU_IR);
             STOPPED = 1;
             break;
         }
@@ -72,7 +72,6 @@ void mmu::opcode::MMU_EXEC(MEMORY_MANAGER* MEM, int CYCLES)
         MMU_OPCODE_HANDLER[MMU_IR](INST);
 
         MMU_PC += 2;
-        CYCLES -= OPCODE_CYCLES;
         CYCLES_USED += OPCODE_CYCLES;
     }
     
