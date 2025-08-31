@@ -51,9 +51,8 @@ namespace aquinas
                 U16 SR;
                 U32 TRANS;
 
-                mmu_mem::MEMORY_MANAGER* MEM;
-
             public:
+                mmu_mem::MEMORY_MANAGER* MEM;
                 std::unordered_map<U32, U32> TLB;
 
             public:
