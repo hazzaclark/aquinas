@@ -40,12 +40,13 @@ MMU_MAKE_OPCODE(PFLUSHA,
 static const MMU_OPCODE MMU_OPCODE_HANDLER_TLB[] = 
 {
     { PFLUSHA_HANDLER, 0xFFFF, 0xF518, 4, "PFLUSHA "},
+    { nullptr,         0,      0,      0, nullptr   }
 };
 
 // TACKLES THE SAME SORT OF PRINCIPLE IN BEING ABLE TO UTILISE
 // A FUNCTION POINTER TO ACCESS THE CONCURRENT OPCODE DEF 
 
-void MMU_BUILD_OPCODE_TABLE(std::array<MMU_HANDLER, 0x10000>& MMU_OPCODE_TLB,
+void mmu::opcode::MMU_BUILD_OPCODE_TABLE(std::array<MMU_HANDLER, 0x10000>& MMU_OPCODE_TLB,
                                     std::array<U8, 0x10000>& CYCLE_RANGE)
 {
     int INDEX = 0;
