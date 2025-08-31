@@ -17,6 +17,9 @@ using namespace aquinas;
 using namespace aquinas::mmu;
 using namespace aquinas::mmu::opcode;
 
+aquinas::mmu::MMU_OPCODE_HANDLER_TYPE aquinas::MMU_OPCODE_HANDLER;
+aquinas::mmu::MMU_CYCLE_RANGE_TYPE aquinas::MMU_CYCLE_RANGE;
+
 /////////////////////////////////////////////////////////////////
 //                 MMU MAIN OPCODE DEFINTIONS
 /////////////////////////////////////////////////////////////////
@@ -58,8 +61,7 @@ static const MMU_OPCODE MMU_OPCODE_HANDLER_TLB[] =
 // TACKLES THE SAME SORT OF PRINCIPLE IN BEING ABLE TO UTILISE
 // A FUNCTION POINTER TO ACCESS THE CONCURRENT OPCODE DEF 
 
-void mmu::opcode::MMU_BUILD_OPCODE_TABLE(std::array<MMU_HANDLER, 0x10000>& MMU_OPCODE_TLB,
-                                    std::array<U8, 0x10000>& CYCLE_RANGE)
+void mmu::opcode::MMU_BUILD_OPCODE_TABLE(void)
 {
     int INDEX = 0;
     const MMU_OPCODE* OPCODE;
@@ -67,8 +69,8 @@ void mmu::opcode::MMU_BUILD_OPCODE_TABLE(std::array<MMU_HANDLER, 0x10000>& MMU_O
     // INITIALISE ALL OF THE ENTIRES
     for(INDEX = 0; INDEX < 0x10000; INDEX++)
     {
-        MMU_OPCODE_TLB[INDEX] = nullptr;
-        CYCLE_RANGE[INDEX] = 0;
+        MMU_OPCODE_HANDLER[INDEX] = nullptr;
+        MMU_CYCLE_RANGE[INDEX] = 0;
     }
 
     // MAP THE CORRESPONDING OPCODE TO THE HANDLER
@@ -83,8 +85,8 @@ void mmu::opcode::MMU_BUILD_OPCODE_TABLE(std::array<MMU_HANDLER, 0x10000>& MMU_O
             // PRESUPPOSE THAT WE NOW HAVE A MATCH
             if((INDEX & OPCODE->MASK) == OPCODE->MATCH)
             {
-                MMU_OPCODE_TLB[INDEX] = OPCODE->HANDLER;
-                CYCLE_RANGE[INDEX] = OPCODE->CYCLES;
+                aquinas::MMU_OPCODE_HANDLER[INDEX] = OPCODE->HANDLER;
+                aquinas::MMU_CYCLE_RANGE[INDEX] = OPCODE->CYCLES;
             }
         }
 
