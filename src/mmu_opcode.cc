@@ -17,8 +17,8 @@ using namespace aquinas;
 using namespace aquinas::mmu;
 using namespace aquinas::mmu::opcode;
 
-aquinas::mmu::MMU_OPCODE_HANDLER_TYPE aquinas::MMU_OPCODE_HANDLER;
-aquinas::mmu::MMU_CYCLE_RANGE_TYPE aquinas::MMU_CYCLE_RANGE;
+U8 aquinas::MMU_CYCLE_RANGE[0x10000];
+void(*aquinas::MMU_OPCODE_HANDLER[0x10000])(aquinas::mmu::MMU_BASE* MMU);
 
 /////////////////////////////////////////////////////////////////
 //                 MMU MAIN OPCODE DEFINTIONS
@@ -85,8 +85,8 @@ void mmu::opcode::MMU_BUILD_OPCODE_TABLE(void)
             // PRESUPPOSE THAT WE NOW HAVE A MATCH
             if((INDEX & OPCODE->MASK) == OPCODE->MATCH)
             {
-                aquinas::MMU_OPCODE_HANDLER[INDEX] = OPCODE->HANDLER;
-                aquinas::MMU_CYCLE_RANGE[INDEX] = OPCODE->CYCLES;
+                MMU_OPCODE_HANDLER[INDEX] = OPCODE->HANDLER;
+                MMU_CYCLE_RANGE[INDEX] = OPCODE->CYCLES;
             }
         }
 
