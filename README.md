@@ -87,6 +87,26 @@ Due to the way in which some properties are accessed, it wasn't a simple case of
 
 Instead, a compile flag has been added to mitigate this issue; see the [build scheme](https://github.com/hazzaclark/aquinas/commit/478e16bc35920b3cd797a8c05fa9a37dd909fc1c) 
 
+Just like lib68k, this project opts to utilise the foundations set by that project to be able to define, build and recognise the Opcode Table and it's respective handlers.
+
+Given the very limited ISA for the 68851 itself, it wasn't REALLY needed to include this abstracted means of defining opcodes but it allows for more versatility when handling respective types
+
+```cpp
+// CREATE A HANDLER TYPE FOR BEING ABLE TO DELEGATE THE FORWARD
+// DECLARATION OF THE MMU AGAINST COMMON PARAMS
+
+using MMU_HANDLER = void(*)(MMU_BASE*, U32);
+
+
+// CONCATENATE A TYPE TO _HANDLER WHICH WILL
+// BE ACCESSED THROUGH THE ABOVE FUNCTION POINTER
+#define MMU_MAKE_OPCODE(OP, IMPL) \
+static void OP##_HANDLER(MMU_BASE* MMU, U32 PC)  \
+{ \
+    IMPL \
+}
+```
+
 ## Building:
 
 To build this project, you will need a C++ compiler which supports CMake 3.20. From there, it is just a case of:
