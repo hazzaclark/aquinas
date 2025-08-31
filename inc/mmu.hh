@@ -23,16 +23,11 @@ namespace aquinas
     namespace mmu
     {
         class MMU_BASE; 
-
-        // RAW FUNCTION POINTER FOR MEMORY READ
-        // MITIGATE THE OVERHEAD FOR NEEDLESS TEMPLATE CREATION
-
-        using MMU_FUNC_READ_16 = std::function<U16(U32)>;
         
         // CREATE A HANDLER TYPE FOR BEING ABLE TO DELEGATE THE FORWARD
         // DECLARATION OF THE MMU AGAINST COMMON PARAMS
 
-        using MMU_HANDLER = void(*)(MMU_BASE*, MMU_FUNC_READ_16, U32);
+        using MMU_HANDLER = void(*)(MMU_BASE*, U32);
 
         // CREATE A HANDLER TYPE FOR THE OPCODE HANDLER STRUCTURE
         // WHICH WILL PRESUPPOSE THE BASELINE MMU HANDLER TO DETERMINE EA
@@ -82,16 +77,6 @@ namespace aquinas
 
                 [[nodiscard]] U16 GET_TRANS() const noexcept { return TRANS; }
                 void SET_TRANS(U32 VALUE) noexcept { TRANS = VALUE; }
-
-                // INSTRUCTION HANDLERS
-                static void PFLUSHA_HANDLER(MMU_BASE* MMU, MMU_FUNC_READ_16 MEM_READ, U32 PC);
-                static void PFLUSHAN_HANDLER(MMU_BASE* MMU, MMU_FUNC_READ_16 MEM_READ, U32 PC);
-                static void PFLUSH_HANDLER(MMU_BASE* MMU, MMU_FUNC_READ_16 MEM_READ, U32 PC);
-                static void PLOADR_HANDLER(MMU_BASE* MMU, MMU_FUNC_READ_16 MEM_READ, U32 PC);
-                static void PLOADW_HANDLER(MMU_BASE* MMU, MMU_FUNC_READ_16 MEM_READ, U32 PC);
-                static void PMOVE_HANDLER(MMU_BASE* MMU, MMU_FUNC_READ_16 MEM_READ, U32 PC);
-                static void PTESTR_HANDLER(MMU_BASE* MMU, MMU_FUNC_READ_16 MEM_READ, U32 PC);
-                static void PTESTW_HANDLER(MMU_BASE* MMU, MMU_FUNC_READ_16 MEM_READ, U32 PC);
         };
 
         namespace opcode
@@ -99,9 +84,13 @@ namespace aquinas
             void MMU_BUILD_OPCODE_TABLE(std::array<MMU_HANDLER, 0x10000>& MMU_OPCODE_TLB,
                                     std::array<U8, 0x10000>& CYCLE_RANGE);
 
-            void MMU_EXEC(MMU_BASE* INST, MMU_FUNC_READ_16 MEM_READ, U32& PC, int MAX_CYCLES);
+            void MMU_EXEC(MMU_BASE* INST, U32& PC, int MAX_CYCLES);
 
-            extern MMU_OPCODE MMU_OPCODE_HANDLER_TLB[];
+            #define MMU_MAKE_OPCODE(OP, IMPL) \
+            static void OP##_HANDLER(MMU_BASE* MMU, U32 PC)  \
+            { \
+                IMPL \
+            }
         }
     }
 }
