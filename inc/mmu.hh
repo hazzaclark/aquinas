@@ -56,7 +56,7 @@ namespace aquinas
 
             public:
                 MMU_BASE();
-                ~MMU_BASE() = default;
+                MMU_BASE(mmu_mem::MEMORY_MANAGER* MEM);
 
                 void FLUSH_TLB() noexcept { TLB.clear(); }
                 void FLUSH_TLB_ENTRY(U32 ADDRESS) noexcept;
