@@ -53,9 +53,10 @@ MMU_MAKE_OPCODE(PFLUSHAN,
 // GENERATE THE HANDLER TABLE FOR ALL RESPECTIVE OPCODE ENTRIES
 static const MMU_OPCODE MMU_OPCODE_HANDLER_TLB[] = 
 {
-    { PFLUSHA_HANDLER,  0xFFFF,         0xF518,     4,      "PFLUSHA"           },
-    { PFLUSHAN_HANDLER, 0xFFFF,         0xF510,     4,      "PFLUSHAN"          },
-    { nullptr,          0,              0,          0,      nullptr             }
+    // HANDLER          // MASK         // MATCH    // CYCLES   // NAME
+    { PFLUSHA_HANDLER,  0xFFFF,         0xF518,     4,          "PFLUSHA"           },
+    { PFLUSHAN_HANDLER, 0xFFFF,         0xF510,     4,          "PFLUSHAN"          },
+    { nullptr,          0,              0,          0,          nullptr             }
 };
 
 // TACKLES THE SAME SORT OF PRINCIPLE IN BEING ABLE TO UTILISE
