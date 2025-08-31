@@ -29,6 +29,9 @@ namespace aquinas
 
         using MMU_HANDLER = void(*)(MMU_BASE*, U32);
 
+        using MMU_CYCLE_RANGE_TYPE = unsigned char[0x10000];
+        using MMU_OPCODE_HANDLER_TYPE = MMU_HANDLER[0x10000];
+
         // CREATE A HANDLER TYPE FOR THE OPCODE HANDLER STRUCTURE
         // WHICH WILL PRESUPPOSE THE BASELINE MMU HANDLER TO DETERMINE EA
         // IN CONJUNCTION WITH THE MASK, MATCH AND CYCLES
@@ -82,18 +85,20 @@ namespace aquinas
 
         namespace opcode
         {
-            void MMU_BUILD_OPCODE_TABLE(std::array<MMU_HANDLER, 0x10000>& MMU_OPCODE_TLB,
-                                    std::array<U8, 0x10000>& CYCLE_RANGE);
+            void MMU_BUILD_OPCODE_TABLE(void);
 
-            void MMU_EXEC(MMU_BASE* INST, U32& PC, int MAX_CYCLES);
+            void MMU_EXEC(int CYCLES);
 
             #define MMU_MAKE_OPCODE(OP, IMPL) \
             static void OP##_HANDLER(MMU_BASE* MMU, U32 PC)  \
             { \
                 IMPL \
-            }
+            }      
         }
     }
+
+    extern mmu::MMU_CYCLE_RANGE_TYPE MMU_CYCLE_RANGE;
+    extern mmu::MMU_OPCODE_HANDLER_TYPE MMU_OPCODE_HANDLER;
 }
 
 #endif
