@@ -101,6 +101,8 @@ cmake .. && make
 
 [Motorola 68851 Programmer Manual](https://radio-hobby.org/uploads/datasheet/38/mc68/mc68851.pdf)
 
+[Another 68851 Manual](https://archive.org/details/bitsavers_motorola68Manual3ed1988_14980771)
+
 [lib68k_mem](https://github.com/hazzaclark/lib68k_mem)
 
 
