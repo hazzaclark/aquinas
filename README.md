@@ -97,14 +97,13 @@ Given the very limited ISA for the 68851 itself, it wasn't REALLY needed to incl
 
 using MMU_HANDLER = void(*)(MMU_BASE*, U32);
 
-
 // CONCATENATE A TYPE TO _HANDLER WHICH WILL
 // BE ACCESSED THROUGH THE ABOVE FUNCTION POINTER
 #define MMU_MAKE_OPCODE(OP, IMPL) \
-static void OP##_HANDLER(MMU_BASE* MMU, U32 PC)  \
+void OP##_HANDLER(MMU_BASE* MMU)  \
 { \
     IMPL \
-}
+} 
 ```
 
 ## Building:
