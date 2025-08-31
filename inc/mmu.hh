@@ -55,6 +55,9 @@ namespace aquinas
                 U16 TC;
                 U16 SR;
                 U32 TRANS;
+                std::unordered_map<U32, U32> TLB;
+
+                mmu_mem::MEMORY_MANAGER* MEM;
 
             public:
                 MMU_BASE();
@@ -89,9 +92,6 @@ namespace aquinas
                 static void PMOVE_HANDLER(MMU_BASE* MMU, MMU_FUNC_READ_16 MEM_READ, U32 PC);
                 static void PTESTR_HANDLER(MMU_BASE* MMU, MMU_FUNC_READ_16 MEM_READ, U32 PC);
                 static void PTESTW_HANDLER(MMU_BASE* MMU, MMU_FUNC_READ_16 MEM_READ, U32 PC);
-
-                // CACHE FOR TRANSLATION TLB
-                std::unordered_map<U32, U32> TLB;
         };
 
         // ==================================================
@@ -102,7 +102,6 @@ namespace aquinas
                                     std::array<U8, 0x10000>& CYCLE_RANGE);
 
         void MMU_EXEC(MMU_BASE* INST, MMU_FUNC_READ_16 MEM_READ, U32& PC, int MAX_CYCLES);
-        MMU_FUNC_READ_16 MMU_READER(mmu_mem::MEMORY_MANAGER* MEM);
     }
 }
 
