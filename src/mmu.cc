@@ -37,8 +37,15 @@ MMU_BASE::MMU_BASE(mmu_mem::MEMORY_MANAGER* MEM)
 
 void mmu::opcode::MMU_EXEC(MEMORY_MANAGER* MEM, int CYCLES)
 {
+    // 31/08/25
+    // A LOT OF THESE ARE HERE SIMPLY BECAUSE THAT UNLIKE LIB68K
+    // WE ARENT REALLY TOO CONCERNED WITH HAVING AN OVERARCHING
+    // CYCLE COUNT - AS WE ARE EMULATING THE CPU CYCLE ACCURATELY
+
     MMU_BASE* INST = new MMU_BASE(MEM);
     int STOPPED = 0;
+    int OPCODE_CYCLES = 0;
+    int CYCLES_USED = 0;
     U32 MMU_PC = 0;
 
     while(!STOPPED && CYCLES > 0)
@@ -46,7 +53,7 @@ void mmu::opcode::MMU_EXEC(MEMORY_MANAGER* MEM, int CYCLES)
         // READ THE CURRENT INSTRUCTION INTO A MOCK IR
         // DISCERN HOW MANY CYCLES IT TAKES
         U16 MMU_IR = INST->MEM->MEM_READ_16(MMU_PC);
-        int OPCODE_CYCLES = MMU_CYCLE_RANGE[MMU_IR];
+        OPCODE_CYCLES = MMU_CYCLE_RANGE[MMU_IR];
 
         // WE WILL PUT THIS HERE FOR NOW
         // (it looks messy, I know)
@@ -58,15 +65,17 @@ void mmu::opcode::MMU_EXEC(MEMORY_MANAGER* MEM, int CYCLES)
             break;
         }
 
-        printf("[PC -> %04X]  [IR -> %04X]  [CYCLES -> %d]\n", 
-               MMU_PC, MMU_IR, OPCODE_CYCLES);
+        printf("[PC -> %04X]  [IR -> %04X]  ", 
+               MMU_PC, MMU_IR);
 
         // PASS THE INDEXXED OPCODE INTO THE FUNCTION POINTER
-
         MMU_OPCODE_HANDLER[MMU_IR](INST);
-        MMU_PC += 2;
-        CYCLES += OPCODE_CYCLES;
-    }
 
+        MMU_PC += 2;
+        CYCLES -= OPCODE_CYCLES;
+        CYCLES_USED += OPCODE_CYCLES;
+    }
+    
+    printf("TOTAL CYCLES USED: %d\n", CYCLES_USED);
     delete INST;
 }
