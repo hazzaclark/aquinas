@@ -23,14 +23,6 @@ namespace aquinas
     namespace mmu
     {
         class MMU_BASE; 
-        
-        // CREATE A HANDLER TYPE FOR BEING ABLE TO DELEGATE THE FORWARD
-        // DECLARATION OF THE MMU AGAINST COMMON PARAMS
-
-        using MMU_HANDLER = void(*)(MMU_BASE*, U32);
-
-        using MMU_CYCLE_RANGE_TYPE = unsigned char[0x10000];
-        using MMU_OPCODE_HANDLER_TYPE = MMU_HANDLER[0x10000];
 
         // CREATE A HANDLER TYPE FOR THE OPCODE HANDLER STRUCTURE
         // WHICH WILL PRESUPPOSE THE BASELINE MMU HANDLER TO DETERMINE EA
@@ -38,7 +30,7 @@ namespace aquinas
 
         struct MMU_OPCODE
         {
-            MMU_HANDLER HANDLER;
+            void(*HANDLER)(aquinas::mmu::MMU_BASE* MMU);
             U16 MASK;
             U16 MATCH;
             U8 CYCLES;
@@ -87,18 +79,18 @@ namespace aquinas
         {
             void MMU_BUILD_OPCODE_TABLE(void);
 
-            void MMU_EXEC(int CYCLES);
+            void MMU_EXEC(mmu_mem::MEMORY_MANAGER* MEM, int CYCLES);
 
             #define MMU_MAKE_OPCODE(OP, IMPL) \
-            static void OP##_HANDLER(MMU_BASE* MMU, U32 PC)  \
+            void OP##_HANDLER(MMU_BASE* MMU)  \
             { \
                 IMPL \
             }      
         }
     }
 
-    extern mmu::MMU_CYCLE_RANGE_TYPE MMU_CYCLE_RANGE;
-    extern mmu::MMU_OPCODE_HANDLER_TYPE MMU_OPCODE_HANDLER;
+    extern U8 MMU_CYCLE_RANGE[0x10000];
+    extern void(*MMU_OPCODE_HANDLER[0x10000])(aquinas::mmu::MMU_BASE* MMU);
 }
 
 #endif
