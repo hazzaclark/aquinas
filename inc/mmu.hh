@@ -79,7 +79,7 @@ namespace aquinas
         {
             void MMU_BUILD_OPCODE_TABLE(void);
 
-            void MMU_EXEC(mmu_mem::MEMORY_MANAGER* MEM, int CYCLES);
+            void MMU_EXEC(mmu_mem::MEMORY_MANAGER* MEM);
 
             #define MMU_MAKE_OPCODE(OP, IMPL) \
             void OP##_HANDLER(MMU_BASE* MMU)  \
