@@ -17,10 +17,19 @@ using namespace aquinas;
 using namespace aquinas::mmu;
 using namespace aquinas::mmu::opcode;
 
+/////////////////////////////////////////////////////////////////
+//                 MMU MAIN OPCODE DEFINTIONS
+/////////////////////////////////////////////////////////////////
+
+MMU_MAKE_OPCODE(PFLUSHA, 
+{
+    MMU->FLUSH_TLB();
+})
+
 // GENERATE THE HANDLER TABLE FOR ALL RESPECTIVE OPCODE ENTRIES
 static const MMU_OPCODE MMU_OPCODE_HANDLER_TLB[] = 
 {
-    {},
+    { PFLUSHA_HANDLER, 0xFFFF, 0xF518, 4, "PFLUSHA "},
 };
 
 // TACKLES THE SAME SORT OF PRINCIPLE IN BEING ABLE TO UTILISE
