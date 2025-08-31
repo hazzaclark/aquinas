@@ -26,11 +26,33 @@ MMU_MAKE_OPCODE(PFLUSHA,
     MMU->FLUSH_TLB();
 })
 
+// FLUSH OUT ALL NON-GLOBAL ENTRIES FROM THE ATC 
+// THIS IS DONE BY DETERMINING THE GLOBAL BIT WITHIN THE MMU ITSELF
+
+MMU_MAKE_OPCODE(PFLUSHAN,
+{   
+    // ASSUME THE POSITION OF THE GLOBAL BIT
+    // FOR THE SAKE OF SIMPLICITY, WE CAN JUST MANUALLY BIT SHIFT ACCORDINGLY
+    // AGAINST THE MANUAL GLOBAL POSITION
+
+    const U32 MMU_GLB_MASK = (1 << MMU_ATC_SHIFT);
+    U32 FLUSHED = 0;
+
+    for(auto INDEX = MMU->TLB.begin(); INDEX != MMU->TLB.end(); )
+    {
+        // CHECK IF THE ENTRY IS NON-GLOBAL
+        if(!(INDEX->second & MMU_GLB_MASK)) { INDEX = MMU->TLB.erase(INDEX); FLUSHED++; }
+
+        ++INDEX;
+    }
+})
+
 // GENERATE THE HANDLER TABLE FOR ALL RESPECTIVE OPCODE ENTRIES
 static const MMU_OPCODE MMU_OPCODE_HANDLER_TLB[] = 
 {
-    { PFLUSHA_HANDLER, 0xFFFF, 0xF518, 4, "PFLUSHA "},
-    { nullptr,         0,      0,      0, nullptr   }
+    { PFLUSHA_HANDLER,  0xFFFF,         0xF518,     4,      "PFLUSHA"           },
+    { PFLUSHAN_HANDLER, 0xFFFF,         0xF510,     4,      "PFLUSHAN"          },
+    { nullptr,          0,              0,          0,      nullptr             }
 };
 
 // TACKLES THE SAME SORT OF PRINCIPLE IN BEING ABLE TO UTILISE
