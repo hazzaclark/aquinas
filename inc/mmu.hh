@@ -50,9 +50,11 @@ namespace aquinas
                 U16 TC;
                 U16 SR;
                 U32 TRANS;
-                std::unordered_map<U32, U32> TLB;
 
                 mmu_mem::MEMORY_MANAGER* MEM;
+
+            public:
+                std::unordered_map<U32, U32> TLB;
 
             public:
                 MMU_BASE();
@@ -63,19 +65,19 @@ namespace aquinas
                 bool LOOKUP_TLB(U32 LOG_ADDRESS, U32& PHYS_ADDRESS) noexcept;
                 void INSERT_TLB(U32 LOG_ADDRESS, U32 PYS_ADDRESS) noexcept;
 
-                [[nodiscard]] U32 GET_CRP() const noexcept { return CRP; }
+                U32 GET_CRP() const noexcept { return CRP; }
                 void SET_CRP(U32 VALUE) noexcept { CRP = VALUE; }
 
-                [[nodiscard]] U32 GET_SRP() const noexcept { return SRP; }
+                U32 GET_SRP() const noexcept { return SRP; }
                 void SET_SRP(U32 VALUE) noexcept { SRP = VALUE; }
 
-                [[nodiscard]] U16 GET_TC() const noexcept { return TC; }
+                U16 GET_TC() const noexcept { return TC; }
                 void SET_TC(U32 VALUE) noexcept { TC = VALUE; }
 
-                [[nodiscard]] U16 GET_SR() const noexcept { return SR; }
+                U16 GET_SR() const noexcept { return SR; }
                 void SET_SR(U32 VALUE) noexcept { SR = VALUE; }
 
-                [[nodiscard]] U16 GET_TRANS() const noexcept { return TRANS; }
+                U16 GET_TRANS() const noexcept { return TRANS; }
                 void SET_TRANS(U32 VALUE) noexcept { TRANS = VALUE; }
         };
 
