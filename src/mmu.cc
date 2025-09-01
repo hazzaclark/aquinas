@@ -13,6 +13,7 @@ using namespace aquinas;
 using namespace aquinas::mmu;
 using namespace aquinas::mmu_mem;
 using namespace aquinas::mmu::opcode;
+using namespace aquinas::util;
 
 /////////////////////////////////////////////////////////////////
 //                 MMU MAIN INITIALISATION
@@ -29,6 +30,20 @@ MMU_BASE::MMU_BASE(mmu_mem::MEMORY_MANAGER* MEM)
     : CRP(0), SRP(0), TC(0), SR(0), TRANS(0), MEM(MEM)
 {
         TLB.clear();
+}
+
+// SIMPLE INSERTION FOR THE PAGING TLB 
+// ALL OF THIS JUST PRESUPPOSES A RAW ARRAY WHICH ACCESSES THE 
+// LOGICAL PAGE AGAINST THE PHYSICAL PAGE
+
+void MMU_BASE::INSERT_TLB(U32 LOG_ADDRESS, U32 PHYS_ADDRESS) noexcept
+{
+    U32 LOG_PAGE = LOG_ADDRESS & MMU_PAGE_MAX;
+    U32 PHYS_PAGE = PHYS_ADDRESS & MMU_PAGE_MAX;
+
+    // ADD TO THE TLB BUFFER
+    TLB[LOG_PAGE] = PHYS_PAGE;
+    printf("TLB ENTRY INSERTED: 0x%08X -> 0x%08X\n", LOG_PAGE, PHYS_PAGE);
 }
 
 // LOOKUP THE TABLE BASED ON A LOGICAL AND PHYSCIAL ADDRESS
