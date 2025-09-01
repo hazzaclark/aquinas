@@ -12,7 +12,9 @@ option(ENABLE_VERBOSE_TRACE "MMU VERBOSE TRACE" OFF)
 
 add_executable(aquinas
     "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/mmu.cc"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/mmu_mem.cc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/mmu_opcode.cc"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/mmu_util.cc"
 )
 
