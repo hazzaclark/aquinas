@@ -61,7 +61,7 @@ MMU_MAKE_OPCODE(HALT,
 MMU_MAKE_OPCODE(ILLEGAL,
 {
     printf("ILLEGAL INSTRUCTION\n");
-    exit(1);
+    MMU->MEM->SET_STOPPED(true);
 })
 
 // GENERATE THE HANDLER TABLE FOR ALL RESPECTIVE OPCODE ENTRIES
@@ -71,8 +71,8 @@ static const MMU_OPCODE MMU_OPCODE_HANDLER_TLB[] =
     { PFLUSHA_HANDLER,  0xFFFF,         0xF518,     4,          "PFLUSHA"           },
     { PFLUSHAN_HANDLER, 0xFFFF,         0xF510,     4,          "PFLUSHAN"          },
     { HALT_HANDLER,     0xFFFF,         0xF000,     4,          "HALT"              },
-    { ILLEGAL_HANDLER,  0xFFFF,         0xF000,     4,          "ILLEGAL"           },
-    { NULL,             0,              0,          0,          "NULL"              }
+    { ILLEGAL_HANDLER,  0xFFFF,         0x0000,     4,          "ILLEGAL"           },
+    { nullptr,             0,              0,          0,       "NULL"              }
 };
 
 // TACKLES THE SAME SORT OF PRINCIPLE IN BEING ABLE TO UTILISE
