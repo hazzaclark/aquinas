@@ -43,12 +43,11 @@ void mmu::opcode::MMU_EXEC(MEMORY_MANAGER* MEM)
     // CYCLE COUNT - AS WE ARE EMULATING THE CPU CYCLE ACCURATELY
 
     MMU_BASE* INST = new MMU_BASE(MEM);
-    int STOPPED = 0;
     int OPCODE_CYCLES = 0;
     int CYCLES_USED = 0;
     unsigned MMU_PC = 0;
 
-    while(!STOPPED)
+    while(!INST->MEM->IS_STOPPED())
     {
         // READ THE CURRENT INSTRUCTION INTO A MOCK IR
         // DISCERN HOW MANY CYCLES IT TAKES
