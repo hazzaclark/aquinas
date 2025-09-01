@@ -50,13 +50,29 @@ MMU_MAKE_OPCODE(PFLUSHAN,
     }
 })
 
+// IN A REAL CO-PROCESSOR SENSE, HALT WILL NOT BE GOVERNED BY THE MMU
+// ADD IT HERE TO PRESUPPOSE THAT FUNCTIONALITY AND TO MITIGATE ILLEGAL INSTRUCTIONS
+
+MMU_MAKE_OPCODE(HALT,
+{
+    MMU->MEM->SET_STOPPED(true);
+})
+
+MMU_MAKE_OPCODE(ILLEGAL,
+{
+    printf("ILLEGAL INSTRUCTION\n");
+    exit(1);
+})
+
 // GENERATE THE HANDLER TABLE FOR ALL RESPECTIVE OPCODE ENTRIES
 static const MMU_OPCODE MMU_OPCODE_HANDLER_TLB[] = 
 {
     // HANDLER          // MASK         // MATCH    // CYCLES   // NAME
     { PFLUSHA_HANDLER,  0xFFFF,         0xF518,     4,          "PFLUSHA"           },
     { PFLUSHAN_HANDLER, 0xFFFF,         0xF510,     4,          "PFLUSHAN"          },
-    { nullptr,          0,              0,          0,          nullptr             }
+    { HALT_HANDLER,     0xFFFF,         0xF000,     4,          "HALT"              },
+    { ILLEGAL_HANDLER,  0xFFFF,         0xF000,     4,          "ILLEGAL"           },
+    { NULL,             0,              0,          0,          "NULL"              }
 };
 
 // TACKLES THE SAME SORT OF PRINCIPLE IN BEING ABLE TO UTILISE
@@ -70,13 +86,13 @@ void mmu::opcode::MMU_BUILD_OPCODE_TABLE(void)
     // INITIALISE ALL OF THE ENTIRES
     for(INDEX = 0; INDEX < 0x10000; INDEX++)
     {
-        MMU_OPCODE_HANDLER[INDEX] = nullptr;
+        MMU_OPCODE_HANDLER[INDEX] = ILLEGAL_HANDLER;
         MMU_CYCLE_RANGE[INDEX] = 0;
     }
 
     // MAP THE CORRESPONDING OPCODE TO THE HANDLER
     OPCODE = MMU_OPCODE_HANDLER_TLB; 
-    while(OPCODE->HANDLER != nullptr)
+    while(OPCODE->HANDLER != NULL)
     {
         printf("PROCESSING MMU OPCODE: MASK = 0x%04X, MATCH = 0x%04X, HANDLER ADDRESS = %p, NAME = %s\n",
                OPCODE->MASK, OPCODE->MATCH, (void*)OPCODE->HANDLER, OPCODE->NAME);
