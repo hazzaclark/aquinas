@@ -33,7 +33,10 @@ namespace aquinas
         #define     MAX_MEMORY_SIZE         0x1000000
         #define     MAX_ADDR_END            (MAX_ADDR_START + MAX_MEMORY_SIZE - 1)
 
-        #define     VERBOSE_HOOK            OPT_OFF
+        // 01/09/25 - NOW THIS DECIDES TO WORK?!
+        #ifndef VERBOSE_TRACE_ENABLED
+        #define VERBOSE_TRACE_ENABLED   1
+        #endif
         
         // DEFINE ENUM'S TO INADVERTENTLY REPLACE THE NEED FOR CONSTANT EXPRESSIONS
         // HELPS WITH BEING ABLE TO REPURPOSE AND MODULARISE LATER ON
