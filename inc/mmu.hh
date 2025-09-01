@@ -49,6 +49,7 @@ namespace aquinas
             public:
                 mmu_mem::MEMORY_MANAGER* MEM;
                 std::unordered_map<U32, U32> TLB;
+                U32 PC;
 
             public:
                 MMU_BASE();
@@ -73,6 +74,8 @@ namespace aquinas
 
                 U16 GET_TRANS() const noexcept { return TRANS; }
                 void SET_TRANS(U32 VALUE) noexcept { TRANS = VALUE; }
+
+                U32 GET_PC() const { return PC; }
         };
 
         namespace opcode
