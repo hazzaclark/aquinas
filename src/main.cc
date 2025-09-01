@@ -42,6 +42,15 @@ int main(void)
 
     aquinas::mmu::opcode::MMU_EXEC(&MEM_MANAGER);
 
+    printf("\nTESTING TLB LOOKUP\n");
+
+    U32 PHYS_ADDR;
+    U32 LOG_ADDR = 0x1000;
+
+    MMU.INSERT_TLB(LOG_ADDR, 0x10000);
+    bool RESULT = MMU.LOOKUP_TLB(LOG_ADDR, PHYS_ADDR);
+    printf("[L]: 0x%08X -> [R]: %s\n", LOG_ADDR, RESULT ? "HIT" : "MISS");
+
     MEM_MANAGER.SET_STOPPED(true);
     MEM_MANAGER.SHOW_MEMORY_MAPS();
     return 0;
