@@ -240,7 +240,7 @@ void MEMORY_MANAGER::SHOW_MEMORY_MAPS() const
         if (BUFFER)
         {
             unsigned SIZE = BUFFER->MEM_END() - BUFFER->MEM_BASE() + 1;
-            printf("0x%08X 0x%08X  %3d%s     %2s  %6u  %6u      %s\n",
+            printf("0x%08X 0x%08X  %3ld%s     %2s  %6u  %6u      %s\n",
                     BUFFER->MEM_BASE(),
                     BUFFER->MEM_END(),
                     FORMAT_SIZE(SIZE), 
