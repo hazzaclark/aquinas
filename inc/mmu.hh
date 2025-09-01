@@ -57,7 +57,7 @@ namespace aquinas
                 void FLUSH_TLB() noexcept { TLB.clear(); }
                 void FLUSH_TLB_ENTRY(U32 ADDRESS) noexcept;
                 bool LOOKUP_TLB(U32 LOG_ADDRESS, U32& PHYS_ADDRESS) noexcept;
-                void INSERT_TLB(U32 LOG_ADDRESS, U32 PYS_ADDRESS) noexcept;
+                void INSERT_TLB(U32 LOG_ADDRESS, U32 PHYS_ADDRESS) noexcept;
 
                 U32 GET_CRP() const noexcept { return CRP; }
                 void SET_CRP(U32 VALUE) noexcept { CRP = VALUE; }
