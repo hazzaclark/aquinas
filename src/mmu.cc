@@ -46,27 +46,18 @@ void mmu::opcode::MMU_EXEC(MEMORY_MANAGER* MEM)
     int STOPPED = 0;
     int OPCODE_CYCLES = 0;
     int CYCLES_USED = 0;
-    U32 MMU_PC = 0;
+    unsigned MMU_PC = 0;
 
     while(!STOPPED)
     {
         // READ THE CURRENT INSTRUCTION INTO A MOCK IR
         // DISCERN HOW MANY CYCLES IT TAKES
         U16 MMU_IR = INST->MEM->MEM_READ_16(MMU_PC);
-        OPCODE_CYCLES = MMU_CYCLE_RANGE[MMU_IR];
-
-        // WE WILL PUT THIS HERE FOR NOW
-        // (it looks messy, I know)
-
-        if (MMU_OPCODE_HANDLER[MMU_IR] == nullptr)
-        {
-            printf("\n[ILLEGAL INSTRUCTION] PC: 0x%04X, IR: 0x%04X\n", MMU_PC, MMU_IR);
-            STOPPED = 1;
-            break;
-        }
 
         printf("[PC -> %04X]  [IR -> %04X]  ", 
                MMU_PC, MMU_IR);
+               
+        OPCODE_CYCLES = MMU_CYCLE_RANGE[MMU_IR];
 
         // PASS THE INDEXXED OPCODE INTO THE FUNCTION POINTER
         MMU_OPCODE_HANDLER[MMU_IR](INST);
