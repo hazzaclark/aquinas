@@ -50,6 +50,19 @@ MMU_MAKE_OPCODE(PFLUSHAN,
     }
 })
 
+MMU_MAKE_OPCODE(PLOADR,
+{   
+    // PRELOAD AN ARBITARY ATC ENTRY 
+    U32 LOG_ADDR = static_cast<U32>(MMU->MEM->MEM_READ_32(MMU->PC + 2));
+
+    // THEN WE JUST LOAD THAT LOGICAL ADDRESS INTO THE TLB
+    U32 PHYS_ADDR = LOG_ADDR;
+    MMU->INSERT_TLB(LOG_ADDR, PHYS_ADDR);
+
+    printf("\nPLOADW: PRELOADED ATC ENTRY 0x%08X -> 0x%08X FOR WRITE\n", 
+           LOG_ADDR, PHYS_ADDR);
+})
+
 // IN A REAL CO-PROCESSOR SENSE, HALT WILL NOT BE GOVERNED BY THE MMU
 // ADD IT HERE TO PRESUPPOSE THAT FUNCTIONALITY AND TO MITIGATE ILLEGAL INSTRUCTIONS
 
@@ -70,6 +83,7 @@ static const MMU_OPCODE MMU_OPCODE_HANDLER_TLB[] =
     // HANDLER          // MASK         // MATCH    // CYCLES   // NAME
     { PFLUSHA_HANDLER,  0xFFFF,         0xF518,     4,          "PFLUSHA"           },
     { PFLUSHAN_HANDLER, 0xFFFF,         0xF510,     4,          "PFLUSHAN"          },
+    { PLOADR_HANDLER,   0xFFC0,         0xF200,     8,          "PLOADR"            },
     { HALT_HANDLER,     0xFFFF,         0xF000,     4,          "HALT"              },
     { ILLEGAL_HANDLER,  0xFFFF,         0x0000,     4,          "ILLEGAL"           },
     { nullptr,             0,              0,          0,       "NULL"              }
