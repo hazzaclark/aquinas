@@ -34,7 +34,7 @@ namespace aquinas
         #define     MAX_ADDR_END            (MAX_ADDR_START + MAX_MEMORY_SIZE - 1)
 
         #define     VERBOSE_HOOK            OPT_OFF
-
+        
         // DEFINE ENUM'S TO INADVERTENTLY REPLACE THE NEED FOR CONSTANT EXPRESSIONS
         // HELPS WITH BEING ABLE TO REPURPOSE AND MODULARISE LATER ON
 
@@ -139,21 +139,6 @@ namespace aquinas
                 bool TRACE_ENABLED = false;
                 bool STOPPED = false;
 
-                static constexpr std::array<const char*, 11> ERROR_MSG = 
-                {
-                    "OK",
-                    "MEMORY OUT OF BOUNDS",
-                    "MEMORY IS READ ONLY", 
-                    "MEMORY REGION IS UNMAPPED",
-                    "MEMORY HAS EXCEEDED BUS LIMIT",
-                    "MEMORY HAS TOO MANY BUFFERS",
-                    "MEMORY HAS AN INVALID SIZE FOR REGION",
-                    "MEMORY VIOLATES A RESERVED RANGE",
-                    "MEMORY OVERFLOW",
-                    "MEMORY ENCOUNTERED A BAD READ",
-                    "MEMORY ENCOUNTERED A BAD WRITE"
-                };
-
                 bool IS_TRACE_ENABLED(aquinas::mmu_mem_opts::MEMORY_OPT_FLAG FLAG) const noexcept;
                 void ENABLE_TRACE_FLAGS(aquinas::mmu_mem_opts::MEMORY_OPT_FLAG FLAG) noexcept;
                 void DISABLE_TRACE_FLAGS(aquinas::mmu_mem_opts::MEMORY_OPT_FLAG FLAG) noexcept;
@@ -172,6 +157,7 @@ namespace aquinas
                 MEMORY_MANAGER();
 
                 void SET_STOPPED(bool IS_STOPPED) { STOPPED = IS_STOPPED; }
+                bool IS_STOPPED() const { return STOPPED; }
                 void SHOW_MEMORY_MAPS() const;
                 
                 bool MAP_MEMORY(U32 BASE, U32 END, bool WRITEABLE);
@@ -196,8 +182,36 @@ namespace aquinas
                                 aquinas::mmu_mem_opts::MEMORY_ERROR ERROR,
                                 aquinas::mmu_mem_opts::MEMORY_SIZE SIZE,
                                                     const char* MSG, ...);
+                
+                #if VERBOSE_TRACE_ENABLED
+                    void VERBOSE_TRACE(const char* FMT, ...) const;
+                #else
+                    inline void VERBOSE_TRACE(const char* FMT, ...) const { (void)FMT; }
+                #endif
 
-                void VERBOSE_TRACE(const char* FMT, ...) const;
+                #if ILLEGAL_TRACE_ENABLED
+                    void ILLEGAL_HOOK(const char* FMT, ...) const;
+                #else
+                    inline void ILLEGAL_HOOK(const char* FMT, ...) const { (void)FMT; }
+                #endif
+
+                
+
+            public:
+                static constexpr std::array<const char*, 11> ERROR_MSG =
+                {
+                    "OK",
+                    "MEMORY OUT OF BOUNDS",
+                    "MEMORY IS READ ONLY", 
+                    "MEMORY REGION IS UNMAPPED",
+                    "MEMORY HAS EXCEEDED BUS LIMIT",
+                    "MEMORY HAS TOO MANY BUFFERS",
+                    "MEMORY HAS AN INVALID SIZE FOR REGION",
+                    "MEMORY VIOLATES A RESERVED RANGE",
+                    "MEMORY OVERFLOW",
+                    "MEMORY ENCOUNTERED A BAD READ",
+                    "MEMORY ENCOUNTERED A BAD WRITE"
+                };
         };
     }
 }
