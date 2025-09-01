@@ -42,7 +42,7 @@ void mmu::opcode::MMU_EXEC(MEMORY_MANAGER* MEM)
     // WE ARENT REALLY TOO CONCERNED WITH HAVING AN OVERARCHING
     // CYCLE COUNT - AS WE ARE EMULATING THE CPU CYCLE ACCURATELY
 
-    MMU_BASE* INST = new MMU_BASE(MEM);
+    std::unique_ptr<MMU_BASE> INST = std::make_unique<MMU_BASE>(MEM);
     int OPCODE_CYCLES = 0;
     int CYCLES_USED = 0;
     unsigned MMU_PC = 0;
@@ -59,12 +59,11 @@ void mmu::opcode::MMU_EXEC(MEMORY_MANAGER* MEM)
         OPCODE_CYCLES = MMU_CYCLE_RANGE[MMU_IR];
 
         // PASS THE INDEXXED OPCODE INTO THE FUNCTION POINTER
-        MMU_OPCODE_HANDLER[MMU_IR](INST);
+        MMU_OPCODE_HANDLER[MMU_IR](INST.get());
 
         MMU_PC += 2;
         CYCLES_USED += OPCODE_CYCLES;
     }
     
-    printf("TOTAL CYCLES USED: %d\n", CYCLES_USED);
-    delete INST;
+    printf("\nTOTAL CYCLES USED: %d\n", CYCLES_USED);
 }
