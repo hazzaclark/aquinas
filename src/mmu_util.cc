@@ -43,7 +43,7 @@ void MEMORY_MANAGER::MEM_MAP_TRACE(MEMORY_OPTION OP, U32 BASE,
 {
     if(IS_TRACE_ENABLED(MEMORY_OPT_FLAG::BASIC))
     {
-        std::printf("[TRACE] %c -> START:0x%08X END:0x%08X SIZE:%ld%s\n",
+        std::printf("[TRACE] %c -> START:0x%08X END:0x%08X SIZE:%d%s\n",
                    static_cast<char>(OP),
                    BASE,
                    END,
