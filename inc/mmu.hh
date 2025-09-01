@@ -78,6 +78,27 @@ namespace aquinas
                 U32 GET_PC() const { return PC; }
         };
 
+        namespace atc
+        {
+            // DEFINE THE BASIS FOR A PROPRIATORY ATC ENTRY
+            struct ATC_ENTRY
+            {
+                U32 LOG_ADDR;
+                U32 PHYS_ADDR;
+                U16 PERM;
+                U8 FUNC_CODE;
+                bool IS_VALID;
+                bool MODIFIED;
+                bool USED;
+                bool CACHED;
+                U32 LAST_ACCESS;
+
+                ATC_ENTRY()  :  LOG_ADDR(0), PHYS_ADDR(0), PERM(0),
+                                FUNC_CODE(0), IS_VALID(false), MODIFIED(false),
+                                USED(false), CACHED(false), LAST_ACCESS(0) {}
+            };
+        }
+
         namespace opcode
         {
             void MMU_BUILD_OPCODE_TABLE(void);
