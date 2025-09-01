@@ -81,23 +81,22 @@ void mmu::opcode::MMU_EXEC(MEMORY_MANAGER* MEM)
     std::unique_ptr<MMU_BASE> INST = std::make_unique<MMU_BASE>(MEM);
     int OPCODE_CYCLES = 0;
     int CYCLES_USED = 0;
-    unsigned MMU_PC = 0;
 
     while(!INST->MEM->IS_STOPPED())
     {
         // READ THE CURRENT INSTRUCTION INTO A MOCK IR
         // DISCERN HOW MANY CYCLES IT TAKES
-        U16 MMU_IR = INST->MEM->MEM_READ_16(MMU_PC);
+        U16 MMU_IR = INST->MEM->MEM_READ_16(INST->PC);
             
         OPCODE_CYCLES = MMU_CYCLE_RANGE[MMU_IR];
 
         printf("[PC -> %04X]  [IR -> %04X]  ", 
-               MMU_PC, MMU_IR);
+               INST->PC, MMU_IR);
 
         // PASS THE INDEXXED OPCODE INTO THE FUNCTION POINTER
         MMU_OPCODE_HANDLER[MMU_IR](INST.get());
 
-        MMU_PC += 2;
+        INST->PC += 2;
         CYCLES_USED += OPCODE_CYCLES;
     }
     
