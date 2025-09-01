@@ -9,6 +9,8 @@ Created using the C++17 standard, this project aims to provide an understanding 
 
 Moreover, this project came about as a result of me wanting to be able to learn more about the inner workings and technical nuance surrounding memory management on the level by which processors and co-processors communciate with eachother. All of this aims to cultivate my understanding for the Operating Systems module at my University.
 
+<img width="1219" height="1115" alt="image" src="https://github.com/user-attachments/assets/ca06b09d-4808-4760-b644-427ca476704f" />
+
 # Features:
 
 One of the many intrinsic features of this simulator is the separation between Memory Buffer and Manager-delegated mewmory regions and space.
