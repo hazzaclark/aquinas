@@ -43,12 +43,12 @@ void MEMORY_MANAGER::MEM_MAP_TRACE(MEMORY_OPTION OP, U32 BASE,
 {
     if(IS_TRACE_ENABLED(MEMORY_OPT_FLAG::BASIC))
     {
-        std::printf("[TRACE] %c -> START:0x%08X END:0x%08X SIZE:%d%s\n",
+        std::printf("[TRACE] %c -> START:0x%08X END:0x%08X SIZE:%ld%s\n",
                    static_cast<char>(OP),
                    BASE,
                    END,
-                   FORMAT_SIZE(static_cast<size_t>(SIZE)),
-                   FORMAT_UNIT(static_cast<size_t>(SIZE)).c_str());
+                   FORMAT_SIZE(static_cast<int>(SIZE)),
+                   FORMAT_UNIT(static_cast<int>(SIZE)).c_str());
     }
 }
 
@@ -77,6 +77,7 @@ void MEMORY_MANAGER::MEM_ERROR(MEMORY_OPTION OP, MEMORY_ERROR ERROR,
 // IT DOES LOOK REALLY MESSY, SURE - BUT IT WAS BETTER THAN WHAT I HAD BEFOREHAND
 // WHEREBY I WAS CONVERTING EVERY ARG INTO TO_STRING
 
+#if VERBOSE_TRACE_ENABLED
 void MEMORY_MANAGER::VERBOSE_TRACE(const char* FMT, ...) const
 {
     if(IS_TRACE_ENABLED(MEMORY_OPT_FLAG::VERBOSE))
@@ -91,3 +92,4 @@ void MEMORY_MANAGER::VERBOSE_TRACE(const char* FMT, ...) const
         va_end(ARGS);
     }
 }
+#endif
