@@ -50,6 +50,7 @@ namespace aquinas
                 mmu_mem::MEMORY_MANAGER* MEM;
                 std::unordered_map<U32, U32> TLB;
                 U32 PC;
+                U16 IR;
 
             public:
                 MMU_BASE();
@@ -69,7 +70,8 @@ namespace aquinas
                 U16 GET_TC() const noexcept { return TC; }
                 void SET_TC(U32 VALUE) noexcept { TC = VALUE; }
 
-                U16 GET_SR() const noexcept { return SR; }
+                // FORCE GNU TO RECOGNISE VARIBALE CHANGE AT RUNTIME
+                volatile U16& GET_SR() noexcept { return SR; }
                 void SET_SR(U32 VALUE) noexcept { SR = VALUE; }
 
                 U16 GET_TRANS() const noexcept { return TRANS; }
