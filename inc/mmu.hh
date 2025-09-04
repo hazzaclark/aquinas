@@ -51,6 +51,19 @@ namespace aquinas
                 std::unique_ptr<mmu::atc::ATC_STATS> STATS;
                 U32 ATC_SIZE;
 
+                // FIND AN ARBITRARY ATC ENTRY BASED ON A LOGICAL PAGE ADDRESS
+                // AND IT'S RESPECTIVE FUNCTION CODE
+                int FIND_ATC_ENTRY(U32 LOG_PAGE, U8 FUNC) const noexcept;
+
+                // FIND A GENERIC ATC VICTIM AND PREPARE FOR A NEW ENTRY
+                // REMOVES THE CURRENT ENTRY FROM THE "VICTIM CACHE"
+                // SIMILAR TO A DEQUE IMPLEMENTATION 
+                int MAKE_ATC_ENTRY(void) const noexcept;
+
+                // CONDITIONAL FOR CHECKING THE ACCESS PERMISSIONS FOR A PROVIDED ENTRY
+                // INCLUDES: SUPERVISOR/USER MODES, READ-ONLY, READ/WRITE
+                bool CHECK_ATC_PERMS(const mmu::atc::ATC_ENTRY& ENTRY, U8 TYPE) const noexcept;
+
             public:
                 mmu_mem::MEMORY_MANAGER* MEM;
                 std::unordered_map<U32, U32> TLB;
@@ -118,10 +131,13 @@ namespace aquinas
             };
         }
 
+        // DECLARATIONS FOR OPCODE RELATED HANDLING/TASKS
+        // IMPLEMENTATION IS AKIN TO THE LIKENESS OF LIB68K
+        // WITHOUT MUCH DISPARTIY IN IT'S FUNCTIONALITY
+
         namespace opcode
         {
             void MMU_BUILD_OPCODE_TABLE(void);
-
             void MMU_EXEC(mmu_mem::MEMORY_MANAGER* MEM);
 
             #define MMU_MAKE_OPCODE(OP, IMPL) \
@@ -131,6 +147,9 @@ namespace aquinas
             }      
         }
     }
+
+    // EXTERNAL FUNCTION POIINTERS AGAIN AKIN
+    // TO THE LIKENESS OF LIB68K
 
     extern U8 MMU_CYCLE_RANGE[0x10000];
     extern void(*MMU_OPCODE_HANDLER[0x10000])(aquinas::mmu::MMU_BASE* MMU);
