@@ -46,6 +46,11 @@ namespace aquinas
                 U16 SR;
                 U32 TRANS;
 
+            private:
+                std::unique_ptr<mmu::atc::ATC_ENTRY> ENTRIES;
+                std::unique_ptr<mmu::atc::ATC_STATS> STATS;
+                U32 ATC_SIZE;
+
             public:
                 mmu_mem::MEMORY_MANAGER* MEM;
                 std::unordered_map<U32, U32> TLB;
@@ -55,6 +60,7 @@ namespace aquinas
             public:
                 MMU_BASE();
                 MMU_BASE(mmu_mem::MEMORY_MANAGER* MEM);
+                ~MMU_BASE() = default;
 
                 void FLUSH_TLB() noexcept { TLB.clear(); }
                 void FLUSH_TLB_ENTRY(U32 ADDRESS) noexcept;
@@ -98,6 +104,17 @@ namespace aquinas
                 ATC_ENTRY()  :  LOG_ADDR(0), PHYS_ADDR(0), PERM(0),
                                 FUNC_CODE(0), IS_VALID(false), MODIFIED(false),
                                 USED(false), CACHED(false), LAST_ACCESS(0) {}
+            };
+
+            // GENERIC PERFORMANCE MONITORING FOR ATC OPERATIONS
+            struct ATC_STATS
+            {
+                U32 HITS;
+                U32 MISSES;
+                U32 EVICT;
+                U32 PRELOAD;
+                U32 FLUSHES;
+                std::float_t RATE() const { return HITS + MISSES > 0 ? (std::float_t)HITS / (HITS + MISSES) * 100.0f : 0; }
             };
         }
 
