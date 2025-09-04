@@ -22,14 +22,14 @@ using namespace aquinas::util;
 MMU_BASE::MMU_BASE()
     : CRP(0), SRP(0), TC(0), SR(0), TRANS(0), MEM(nullptr)
 {
-    MEM = new MEMORY_MANAGER();
     TLB.clear();
 }
 
+// KEEPING THIS HERE TO BE ABLE TO MAKE OBJECTS WITH THE MEM MANAGER 
 MMU_BASE::MMU_BASE(mmu_mem::MEMORY_MANAGER* MEM)
     : CRP(0), SRP(0), TC(0), SR(0), TRANS(0), MEM(MEM)
 {
-        TLB.clear();
+    TLB.clear();
 }
 
 // SIMPLE INSERTION FOR THE PAGING TLB 
