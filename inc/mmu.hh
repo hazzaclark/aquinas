@@ -48,8 +48,8 @@ namespace aquinas
                 U32 TRANS;
 
             private:
-                std::unique_ptr<atc::ATC_ENTRY> ENTRIES;
-                std::unique_ptr<atc::ATC_STATS> STATS;
+                std::array<atc::ATC_ENTRY, MMU_ATC_ENTRIES> ENTRIES;
+                atc::ATC_STATS STATS;
                 U32 ATC_SIZE;
 
                 // FIND AN ARBITRARY ATC ENTRY BASED ON A LOGICAL PAGE ADDRESS
@@ -74,7 +74,6 @@ namespace aquinas
             public:
                 MMU_BASE();
                 MMU_BASE(mmu_mem::MEMORY_MANAGER* MEM);
-                ~MMU_BASE() = default;
 
                 void FLUSH_TLB() noexcept { TLB.clear(); }
                 void FLUSH_TLB_ENTRY(U32 ADDRESS) noexcept;
@@ -100,13 +99,10 @@ namespace aquinas
                 U32 GET_PC() const { return PC; }
         };
 
-        // DECLARATIONS FOR OPCODE RELATED HANDLING/TASKS
-        // IMPLEMENTATION IS AKIN TO THE LIKENESS OF LIB68K
-        // WITHOUT MUCH DISPARTIY IN IT'S FUNCTIONALITY
-
         namespace opcode
         {
             void MMU_BUILD_OPCODE_TABLE(void);
+
             void MMU_EXEC(mmu_mem::MEMORY_MANAGER* MEM);
 
             #define MMU_MAKE_OPCODE(OP, IMPL) \
@@ -116,9 +112,6 @@ namespace aquinas
             }      
         }
     }
-
-    // EXTERNAL FUNCTION POIINTERS AGAIN AKIN
-    // TO THE LIKENESS OF LIB68K
 
     extern U8 MMU_CYCLE_RANGE[0x10000];
     extern void(*MMU_OPCODE_HANDLER[0x10000])(aquinas::mmu::MMU_BASE* MMU);
