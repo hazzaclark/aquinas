@@ -86,15 +86,15 @@ void mmu::opcode::MMU_EXEC(MEMORY_MANAGER* MEM)
     {
         // READ THE CURRENT INSTRUCTION INTO A MOCK IR
         // DISCERN HOW MANY CYCLES IT TAKES
-        U16 MMU_IR = INST->MEM->MEM_READ_16(INST->PC);
+        INST->IR = INST->MEM->MEM_READ_16(INST->PC);
             
-        OPCODE_CYCLES = MMU_CYCLE_RANGE[MMU_IR];
+        OPCODE_CYCLES = MMU_CYCLE_RANGE[INST->IR];
 
         printf("[PC -> %04X]  [IR -> %04X]  ", 
-               INST->PC, MMU_IR);
+               INST->PC, INST->IR);
 
         // PASS THE INDEXXED OPCODE INTO THE FUNCTION POINTER
-        MMU_OPCODE_HANDLER[MMU_IR](INST.get());
+        MMU_OPCODE_HANDLER[INST->IR](INST.get());
 
         INST->PC += 2;
         CYCLES_USED += OPCODE_CYCLES;
