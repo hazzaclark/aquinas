@@ -8,6 +8,7 @@
 
 // NESTED INCLUDES
 
+#include <mmu_atc.hh>
 #include <mmu_def.hh>
 #include <mmu_mem.hh>
 #include <util.hh>
@@ -47,8 +48,8 @@ namespace aquinas
                 U32 TRANS;
 
             private:
-                std::unique_ptr<mmu::atc::ATC_ENTRY> ENTRIES;
-                std::unique_ptr<mmu::atc::ATC_STATS> STATS;
+                std::unique_ptr<atc::ATC_ENTRY> ENTRIES;
+                std::unique_ptr<atc::ATC_STATS> STATS;
                 U32 ATC_SIZE;
 
                 // FIND AN ARBITRARY ATC ENTRY BASED ON A LOGICAL PAGE ADDRESS
@@ -62,7 +63,7 @@ namespace aquinas
 
                 // CONDITIONAL FOR CHECKING THE ACCESS PERMISSIONS FOR A PROVIDED ENTRY
                 // INCLUDES: SUPERVISOR/USER MODES, READ-ONLY, READ/WRITE
-                bool CHECK_ATC_PERMS(const mmu::atc::ATC_ENTRY& ENTRY, U8 TYPE) const noexcept;
+                bool CHECK_ATC_PERMS(const atc::ATC_ENTRY& ENTRY, U8 TYPE) noexcept;
 
             public:
                 mmu_mem::MEMORY_MANAGER* MEM;
@@ -98,38 +99,6 @@ namespace aquinas
 
                 U32 GET_PC() const { return PC; }
         };
-
-        namespace atc
-        {
-            // DEFINE THE BASIS FOR A PROPRIATORY ATC ENTRY
-            struct ATC_ENTRY
-            {
-                U32 LOG_ADDR;
-                U32 PHYS_ADDR;
-                U16 PERM;
-                U8 FUNC_CODE;
-                bool IS_VALID;
-                bool MODIFIED;
-                bool USED;
-                bool CACHED;
-                U32 LAST_ACCESS;
-
-                ATC_ENTRY()  :  LOG_ADDR(0), PHYS_ADDR(0), PERM(0),
-                                FUNC_CODE(0), IS_VALID(false), MODIFIED(false),
-                                USED(false), CACHED(false), LAST_ACCESS(0) {}
-            };
-
-            // GENERIC PERFORMANCE MONITORING FOR ATC OPERATIONS
-            struct ATC_STATS
-            {
-                U32 HITS;
-                U32 MISSES;
-                U32 EVICT;
-                U32 PRELOAD;
-                U32 FLUSHES;
-                std::float_t RATE() const { return HITS + MISSES > 0 ? (std::float_t)HITS / (HITS + MISSES) * 100.0f : 0; }
-            };
-        }
 
         // DECLARATIONS FOR OPCODE RELATED HANDLING/TASKS
         // IMPLEMENTATION IS AKIN TO THE LIKENESS OF LIB68K
