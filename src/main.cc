@@ -5,6 +5,7 @@
 
 // NESTED INCLUDES
 
+#include <mmu_atc.hh>
 #include <mmu_mem.hh>
 #include <mmu_def.hh>
 #include <mmu.hh>
@@ -18,6 +19,7 @@ using namespace aquinas::mmu_mem_opts;
 using namespace aquinas::mmu_mem;
 using namespace aquinas::mmu;
 using namespace aquinas::mmu::opcode;
+using namespace aquinas::atc;
 
 int main(void)
 {
@@ -38,9 +40,16 @@ int main(void)
     printf("\nMANUALLY LOAD MMU OPCODES INTO MEMORY \n");
     MEM_MANAGER.MEM_WRITE_16(0x0000, 0xF518);
     MEM_MANAGER.MEM_WRITE_16(0x0002, 0xF510);
-    MEM_MANAGER.MEM_WRITE_16(0x0004, 0xF000);
+    MEM_MANAGER.MEM_WRITE_16(0x0004, 0xF200);
+    MEM_MANAGER.MEM_WRITE_16(0x0006, 0xF000);
 
+    U32 TEST_LOGICAL_ADDR = 0x12345678;
+    MEM_MANAGER.MEM_WRITE_32(0x0010, TEST_LOGICAL_ADDR);
     aquinas::mmu::opcode::MMU_EXEC(&MEM_MANAGER);
+
+    MMU.ATC_INIT();
+
+    MMU.INSERT_ATC_ENTRY(0x10000, 0x50000, 0x55, 0x01);
 
     printf("\nTESTING TLB LOOKUP\n");
 
@@ -50,6 +59,7 @@ int main(void)
     MMU.INSERT_TLB(LOG_ADDR, 0x10000);
     bool RESULT = MMU.LOOKUP_TLB(LOG_ADDR, PHYS_ADDR);
     printf("[L]: 0x%08X -> [R]: %s\n", LOG_ADDR, RESULT ? "HIT" : "MISS");
+
 
     MEM_MANAGER.SET_STOPPED(true);
     MEM_MANAGER.SHOW_MEMORY_MAPS();
