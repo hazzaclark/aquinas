@@ -48,6 +48,28 @@ namespace aquinas
             U32 FLUSHES;
             std::float_t RATE() const { return HITS + MISSES > 0 ? (std::float_t)HITS / (HITS + MISSES) * 100.0f : 0; }
         };
+
+        // ATC PERMISSION FLAGS
+        enum class ATC_PERMS : U8
+        {
+            ATC_PERM_NONE = 0x00,
+            ATC_PERM_READ = 0x01,
+            ATC_PERM_WRITE = 0x02,
+            ATC_PERM_EXEC = 0x04,
+            ATC_PERM_ALL = 0x07
+        };  
+
+        // ATC FUNCTION CODE DEFS FOR ADDRESS SPACES
+        enum class ATC_FUNC_CODES : U8
+        {
+            ATC_FC_USR_DATA = 1,
+            ATC_FC_USR_PROG = 2,
+            ATC_FC_RES_1 = 3,
+            ATC_FC_RES_2 = 4,
+            ATC_FC_SPV_DATA = 5,
+            ATC_FC_SPV_PROG = 6,
+            ATC_FC_CPU_SPACE = 7
+        };
     }
 }
 
