@@ -58,23 +58,49 @@ bool MMU_BASE::INSERT_ATC_ENTRY(U32 LOG_ADDR, U32 PHYS_ADDR, U8 FUNC, U8 PERMS) 
     // CHECK IF WE ALREADY HAVE AN EXISTING ENTRY
     unsigned EXISTING_INDEX = FIND_ATC_ENTRY(LOG_PAGE, FUNC);
 
-    if(EXISTING_INDEX >= 0)
+    if(EXISTING_INDEX)
     {
         atc::ATC_ENTRY& ENTRY = ENTRIES[EXISTING_INDEX];
+        ENTRY.PHYS_ADDR = PHYS_PAGE;
+        ENTRY.PERM = PERMS;
+        ENTRY.LAST_ACCESS++;
         ENTRY.USED = true;
 
         printf("ATC ENTRY UPDATED: [L]: 0x%08X   ->   [P]: 0x%08X  ->  [FC]: %d  ->  [PERM]: 0x%02X\n", 
                LOG_PAGE, PHYS_PAGE, FUNC, PERMS);
-               
+
         return true;
     }
+
+    return true;
 }
 
 // FIND AN ARBITRARY ATC ENTRY BASED ON A LOGICAL PAGE ADDRESS
 // AND IT'S RESPECTIVE FUNCTION CODE
+
+// THIS IS A BASIC IMPLEMENTATION OF A LINEAR SEARCH
+// UNLESS NEEDED OTHERWISE, THIS WON'T REALLY NEED A WHOLE VERBOSE IMPLEMENTATION
+
 int MMU_BASE::FIND_ATC_ENTRY(U32 LOG_PAGE, U8 FUNC) const noexcept
 {
+    const atc::ATC_ENTRY* const ENTRY = ENTRIES.data();
+    const U32 SIZE = ATC_SIZE();
+    
+    // ITERATE THROUGH EACH ALLOCATABLE SPACE TO DETERMINE
+    // THE SIZE FOR ENTRY
+    
+    for(std::size_t INDEX = 0; INDEX < SIZE; ++INDEX)
+    {
+        const atc::ATC_ENTRY& ENTRY_INDEX = ENTRY[INDEX];
 
+        if(ENTRY_INDEX.LOG_ADDR == LOG_PAGE &&
+            ENTRY_INDEX.FUNC_CODE == FUNC)
+        {
+            return static_cast<int>(INDEX);
+        }
+    }
+
+    return -1;
 }
 
 // THESE PAGES WILL LOOK TO DETERMINE IF AN EXISTING INDEX ALREADY
