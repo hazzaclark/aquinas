@@ -48,7 +48,7 @@ namespace aquinas
                 U32 TRANS;
 
             private:
-                std::array<atc::ATC_ENTRY, MMU_ATC_ENTRIES> ENTRIES;
+                std::vector<atc::ATC_ENTRY> ENTRIES;
                 atc::ATC_STATS STATS;
                 U32 ATC_SIZE;
 
@@ -64,9 +64,6 @@ namespace aquinas
                 // CONDITIONAL FOR CHECKING THE ACCESS PERMISSIONS FOR A PROVIDED ENTRY
                 // INCLUDES: SUPERVISOR/USER MODES, READ-ONLY, READ/WRITE
                 bool CHECK_ATC_PERMS(const atc::ATC_ENTRY& ENTRY, U8 TYPE) noexcept;
-
-                // GET ALL CURRENT ATC ENTRIES WITHIN THE ATC LOOKUP
-                atc::ATC_ENTRY* GET_ATC_ENTRIES(void) { return ENTRIES.data(); }
 
             public:
                 mmu_mem::MEMORY_MANAGER* MEM;
@@ -101,6 +98,12 @@ namespace aquinas
                 void SET_TRANS(U32 VALUE) noexcept { TRANS = VALUE; }
 
                 U32 GET_PC() const { return PC; }
+
+            public:
+                void ATC_INIT() noexcept;
+
+                // GET ALL CURRENT ATC ENTRIES WITHIN THE ATC LOOKUP
+                atc::ATC_ENTRY* ATC_GET_ENTRIES(void) { return ENTRIES.data(); }
         };
 
         namespace opcode
