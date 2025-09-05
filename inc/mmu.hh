@@ -65,6 +65,9 @@ namespace aquinas
                 // INCLUDES: SUPERVISOR/USER MODES, READ-ONLY, READ/WRITE
                 bool CHECK_ATC_PERMS(const atc::ATC_ENTRY& ENTRY, U8 TYPE) noexcept;
 
+                // GET ALL CURRENT ATC ENTRIES WITHIN THE ATC LOOKUP
+                atc::ATC_ENTRY* GET_ATC_ENTRIES(void) { return ENTRIES.data(); }
+
             public:
                 mmu_mem::MEMORY_MANAGER* MEM;
                 std::unordered_map<U32, U32> TLB;
@@ -74,6 +77,7 @@ namespace aquinas
             public:
                 MMU_BASE();
                 MMU_BASE(mmu_mem::MEMORY_MANAGER* MEM);
+                ~MMU_BASE() = default;
 
                 void FLUSH_TLB() noexcept { TLB.clear(); }
                 void FLUSH_TLB_ENTRY(U32 ADDRESS) noexcept;
