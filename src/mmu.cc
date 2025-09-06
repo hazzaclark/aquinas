@@ -66,10 +66,29 @@ bool MMU_BASE::INSERT_ATC_ENTRY(U32 LOG_ADDR, U32 PHYS_ADDR, U8 FUNC, U8 PERMS) 
         ENTRY.LAST_ACCESS++;
         ENTRY.USED = true;
 
-        printf("ATC ENTRY UPDATED: [L]: 0x%08X   ->   [P]: 0x%08X  ->  [FC]: %d  ->  [PERM]: 0x%02X\n", 
+        printf("ATC ENTRY UPDATED: [L]: 0x%08X [P]: 0x%08X [FC]: %d [PERM]: 0x%02X\n", 
                LOG_PAGE, PHYS_PAGE, FUNC, PERMS);
 
         return true;
+    }
+
+    // FIND RELEVANT INFORMATION WITHIN THE CACHE TO BE ABLE 
+    // TO DETERMINE IF AN OLD ENTRY CAN BE EVICTED
+
+    int ATC_VICTM_INDEX = MAKE_ATC_ENTRY();
+    if(ATC_VICTM_INDEX < 0)
+    {
+        printf("ATC ERROR: NO AVAILABLE ENTRIES\n");
+        return false;
+    }
+
+    // EVICT OLD ENTRIES IS VALID
+    if(ENTRIES[ATC_VICTM_INDEX].IS_VALID)
+    {
+        STATS.EVICT++;
+        printf("ATC EVICTED: L:0x%08X (ACCESSED %u TIMES)\n",
+               ENTRIES[ATC_VICTM_INDEX].LOG_ADDR,
+               ENTRIES[ATC_VICTM_INDEX].LAST_ACCESS);
     }
 
     return true;
@@ -92,6 +111,9 @@ int MMU_BASE::FIND_ATC_ENTRY(U32 LOG_PAGE, U8 FUNC) const noexcept
     for(std::size_t INDEX = 0; INDEX < SIZE; ++INDEX)
     {
         const atc::ATC_ENTRY& ENTRY_INDEX = ENTRY[INDEX];
+
+        // SANITY CHECK FOR LIKLEIHOOD OF ENTRY
+        if(!ENTRY->IS_VALID) continue;
 
         if(ENTRY_INDEX.LOG_ADDR == LOG_PAGE &&
             ENTRY_INDEX.FUNC_CODE == FUNC)
