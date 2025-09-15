@@ -17,6 +17,7 @@
 
 #include <array>
 #include <functional>
+#include <memory>
 #include <unordered_map>
 
 namespace aquinas
@@ -50,7 +51,7 @@ namespace aquinas
             private:
                 std::vector<atc::ATC_ENTRY> ENTRIES;
                 atc::ATC_STATS STATS;
-                U32 ATC_SIZE;
+                U32 ATC_SIZE() const { return ENTRIES.size(); };
 
                 // FIND AN ARBITRARY ATC ENTRY BASED ON A LOGICAL PAGE ADDRESS
                 // AND IT'S RESPECTIVE FUNCTION CODE
@@ -64,7 +65,6 @@ namespace aquinas
                 // CONDITIONAL FOR CHECKING THE ACCESS PERMISSIONS FOR A PROVIDED ENTRY
                 // INCLUDES: SUPERVISOR/USER MODES, READ-ONLY, READ/WRITE
                 bool CHECK_ATC_PERMS(const atc::ATC_ENTRY& ENTRY, U8 TYPE) noexcept;
-
             public:
                 mmu_mem::MEMORY_MANAGER* MEM;
                 std::unordered_map<U32, U32> TLB;
@@ -73,7 +73,12 @@ namespace aquinas
 
             public:
                 MMU_BASE();
-                MMU_BASE(mmu_mem::MEMORY_MANAGER* MEM);
+                MMU_BASE(mmu_mem::MEMORY_MANAGER* MEM)
+                    : MEM(MEM), PC(0), IR(0)
+                {
+                        TLB.clear();
+                }
+
                 ~MMU_BASE() = default;
 
                 void FLUSH_TLB() noexcept { TLB.clear(); }
@@ -96,8 +101,6 @@ namespace aquinas
 
                 U16 GET_TRANS() const noexcept { return TRANS; }
                 void SET_TRANS(U32 VALUE) noexcept { TRANS = VALUE; }
-
-                U32 GET_PC() const { return PC; }
 
             public:
                 void ATC_INIT() noexcept;
@@ -128,4 +131,3 @@ namespace aquinas
 }
 
 #endif
-
