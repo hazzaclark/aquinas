@@ -52,8 +52,14 @@ MMU_MAKE_OPCODE(PFLUSHAN,
 
 MMU_MAKE_OPCODE(PLOADR,
 {   
+    // PRELOAD AND EXTRACT FUNCTION CODE
+    // MANUALLY BIT SHIFT BY THE 7TH BIT OF THE IR
+    U8 FC = (MMU->IR >> 4) & 0x07;
+
     // PRELOAD AN ARBITARY ATC ENTRY 
     U32 LOG_ADDR = static_cast<U32>(MMU->MEM->MEM_READ_32(MMU->PC + 2));
+
+    printf("PLOADR: FC:%d ADDR:0x%08X ", FC, LOG_ADDR);
 
     // THEN WE JUST LOAD THAT LOGICAL ADDRESS INTO THE TLB
     U32 PHYS_ADDR = LOG_ADDR;
@@ -65,8 +71,14 @@ MMU_MAKE_OPCODE(PLOADR,
 
 MMU_MAKE_OPCODE(PLOADW,
 {
+    // PRELOAD AND EXTRACT FUNCTION CODE
+    // MANUALLY BIT SHIFT BY THE 7TH BIT OF THE IR
+    U8 FC = (MMU->IR >> 4) & 0x07;
+
     // PRELOAD AN ARBITARY ATC ENTRY 
     U32 LOG_ADDR = static_cast<U32>(MMU->MEM->MEM_READ_32(MMU->PC + 2));
+
+    printf("PLOADW: FC:%d ADDR:0x%08X ", FC, LOG_ADDR);
 
     // THEN WE JUST LOAD THAT LOGICAL ADDRESS INTO THE TLB
     U32 PHYS_ADDR = LOG_ADDR;
@@ -102,6 +114,7 @@ static const MMU_OPCODE MMU_OPCODE_HANDLER_TLB[] =
     { PFLUSHA_HANDLER,  0xFFFF,         0xF518,     4,          "PFLUSHA"           },
     { PFLUSHAN_HANDLER, 0xFFFF,         0xF510,     4,          "PFLUSHAN"          },
     { PLOADR_HANDLER,   0xFFC0,         0xF200,     8,          "PLOADR"            },
+    { PLOADW_HANDLER,   0xFFC0,         0xF400,     8,          "PLOADW"            },
     { HALT_HANDLER,     0xFFFF,         0xF000,     4,          "HALT"              },
     { ILLEGAL_HANDLER,  0xFFFF,         0x0000,     4,          "ILLEGAL"           },
     { nullptr,             0,              0,          0,       "NULL"              }
