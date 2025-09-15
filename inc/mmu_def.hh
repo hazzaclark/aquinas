@@ -17,6 +17,7 @@ namespace aquinas
     namespace mmu_def
     {
         #define     MMU_ATC_ENTRIES         64
+        #define     MMU_ATC_HASH            16
         #define     MMU_ATC_MAX_TLB         7
         #define     MMU_ATC_SHIFT           8
         #define     MMU_ATC_GLB             0x00000100
@@ -26,6 +27,7 @@ namespace aquinas
         #define     MMU_ATC_MOD             0x01000000
         #define     MMU_ATC_MASK            0x00FFFFFF
         #define     MMU_PAGE_MAX            0xFFFFF000
+        #define     MMU_PAGE_OFF            0x00000FFF
 
         #define     MMU_SR_BUS_ERR          0x8000
         #define     MMU_SR_SVR              0x2000
