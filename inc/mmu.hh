@@ -104,6 +104,9 @@ namespace aquinas
 
                 // GET ALL CURRENT ATC ENTRIES WITHIN THE ATC LOOKUP
                 atc::ATC_ENTRY* ATC_GET_ENTRIES(void) { return ENTRIES.data(); }
+
+                // INSERT AN ARBITRARY ATC ENTRY BASED ON A LOGICAL PAGE ADDRESS
+                bool INSERT_ATC_ENTRY(U32, U32, U8, U8) noexcept;
         };
 
         namespace opcode
@@ -125,3 +128,4 @@ namespace aquinas
 }
 
 #endif
+
