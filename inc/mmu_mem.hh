@@ -1,4 +1,4 @@
-// COPYRIGHT (C) HARRY CLARK 2025
+#// COPYRIGHT (C) HARRY CLARK 2025
 // STANDALONE REFERENCE UTILITY FOR SIMULATING THE MOTOROLA 68851 MMU
 
 // THIS FILE PERTAINS TOWARDS THE FUNCTIONALITY ENCOMPASSING MEMORY READ AND WRITES
@@ -21,6 +21,7 @@
 #include <array>
 #include <algorithm>
 #include <bitset>
+#include <cstring>
 #include <memory>
 #include <vector>
 
@@ -35,7 +36,7 @@ namespace aquinas
 
         // 01/09/25 - NOW THIS DECIDES TO WORK?!
         #ifndef VERBOSE_TRACE_ENABLED
-        #define VERBOSE_TRACE_ENABLED   1
+        #define VERBOSE_TRACE_ENABLED   0
         #endif
         
         // DEFINE ENUM'S TO INADVERTENTLY REPLACE THE NEED FOR CONSTANT EXPRESSIONS
@@ -118,7 +119,8 @@ namespace aquinas
                 : BASE(START), END(END), SIZE(END - BASE + 1), WRITEABLE(WRITEABLE)
                 {
                     BUFFER = std::make_unique<U8[]>(SIZE);
-                    std::fill_n(BUFFER.get(), SIZE, 0);
+                    std::memset(BUFFER.get(), 0, SIZE);
+                    USAGE = {0, 0, 0, 0, 0, false};
                 }
 
                 // GETTER METHODS FOR ACCESSING CLASS ATTRIBUTES
