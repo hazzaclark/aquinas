@@ -65,6 +65,7 @@ namespace aquinas
                 // CONDITIONAL FOR CHECKING THE ACCESS PERMISSIONS FOR A PROVIDED ENTRY
                 // INCLUDES: SUPERVISOR/USER MODES, READ-ONLY, READ/WRITE
                 bool CHECK_ATC_PERMS(const atc::ATC_ENTRY& ENTRY, U8 TYPE) noexcept;
+                
             public:
                 mmu_mem::MEMORY_MANAGER* MEM;
                 std::unordered_map<U32, U32> TLB;
